@@ -100,8 +100,29 @@
       overflow: hidden;
     }
     .banner-preview .site-banner-bar { position: relative; width: 100%; border-radius: 12px; }
-    .banner-preview .site-banner-sticker { position: static; }
+    .banner-preview .site-banner { transition: none; }
     .banner-preview .empty { font-size: 13px; opacity: .5; }
+
+    /* Banner list */
+    .banner-item {
+      border: 1.5px solid var(--site-line);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-top: 16px;
+    }
+    @media (min-width: 600px) { .banner-item { padding: 22px; } }
+    .banner-item-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .banner-item-title {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: 15px;
+      color: var(--site-fg);
+    }
+    .empty-note { font-size: 14px; opacity: .6; margin-top: 16px; }
 
     /* Publish card */
     #publish-status {
@@ -135,6 +156,7 @@
     .btn:hover { border-color: var(--pam-pink); color: var(--pam-pink); }
     .btn.primary { background: var(--pam-pink); border-color: var(--pam-pink); color: #fff; }
     .btn.primary:hover { background: var(--pam-pink-500); border-color: var(--pam-pink-500); color: #fff; }
+    .btn.small { padding: 7px 12px; font-size: 11px; }
 
     .publish-hint { font-size: 13px; opacity: .65; margin-top: 14px; }
     .publish-hint code {
@@ -248,65 +270,16 @@
       </div>
     </div>
 
-    <!-- ============ BANNER / STÖRER ============ -->
+    <!-- ============ BANNERS ============ -->
     <div class="cms-card">
-      <h2 class="card-title">Banner &amp; Störer</h2>
-      <p class="card-sub">A site-wide announcement — as a bar at the very top or a floating round Störer. Shown on every page except this one.</p>
+      <h2 class="card-title">Banners</h2>
+      <p class="card-sub">Any number of site-wide messages — a bar at the very top, a round Störer or a corner card. Each with its own CTA, delay and dismiss behavior. Shown on every page except this one.</p>
 
-      <div class="setting">
-        <div>
-          <div class="name" id="lbl-benabled">Show banner</div>
-        </div>
-        <div class="seg" role="group" aria-labelledby="lbl-benabled" data-path="banner.enabled">
-          <button type="button" data-value="true">On</button>
-          <button type="button" data-value="false">Off</button>
-        </div>
-      </div>
+      <div id="banner-list"></div>
 
-      <div class="setting">
-        <div>
-          <div class="name" id="lbl-bstyle">Style</div>
-          <p class="desc">Störer text should stay short — it's a small circle.</p>
-        </div>
-        <div class="seg" role="group" aria-labelledby="lbl-bstyle" data-path="banner.style">
-          <button type="button" data-value="bar">Top bar</button>
-          <button type="button" data-value="sticker">Störer</button>
-        </div>
+      <div class="cms-actions">
+        <button type="button" class="btn primary" id="add-banner">+ Add banner</button>
       </div>
-
-      <div class="setting">
-        <div>
-          <div class="name" id="lbl-bdismiss">Dismissible</div>
-          <p class="desc">Visitors can close the banner; the choice is remembered per campaign ID.</p>
-        </div>
-        <div class="seg" role="group" aria-labelledby="lbl-bdismiss" data-path="banner.dismissible">
-          <button type="button" data-value="true">Yes</button>
-          <button type="button" data-value="false">No</button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="f-btext">Text</label>
-        <input id="f-btext" data-field="banner.text" placeholder="e.g. Summer special: 2 months free on annual plans">
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="f-bcta">CTA label</label>
-          <input id="f-bcta" data-field="banner.ctaLabel" placeholder="See plans">
-        </div>
-        <div class="field">
-          <label for="f-bhref">CTA link</label>
-          <input id="f-bhref" data-field="banner.ctaHref" placeholder="pricing.html">
-        </div>
-      </div>
-      <div class="field">
-        <label for="f-bid">Campaign ID</label>
-        <input id="f-bid" data-field="banner.id">
-        <span class="hint">Dismissals are stored per ID — change it to show the banner again to visitors who closed it.</span>
-      </div>
-
-      <div class="preview-label">Preview</div>
-      <div class="banner-preview" id="banner-preview"></div>
     </div>
 
     <!-- ============ TRACKING ============ -->
@@ -377,13 +350,92 @@
     </div>
   </main>
 
+  <!-- Template for one banner in the list -->
+  <template id="banner-tpl">
+    <div class="banner-item">
+      <div class="banner-item-head">
+        <span class="banner-item-title"></span>
+        <button type="button" class="btn small remove">Remove</button>
+      </div>
+
+      <div class="setting">
+        <div><div class="name">Active</div></div>
+        <div class="seg" data-k="enabled">
+          <button type="button" data-value="true">On</button>
+          <button type="button" data-value="false">Off</button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <div>
+          <div class="name">Style</div>
+          <p class="desc">Bar sits above the nav; Störer text should stay short.</p>
+        </div>
+        <div class="seg" data-k="style">
+          <button type="button" data-value="bar">Top bar</button>
+          <button type="button" data-value="sticker">Störer</button>
+          <button type="button" data-value="card">Card</button>
+        </div>
+      </div>
+
+      <div class="setting" data-show="corner">
+        <div><div class="name">Corner</div></div>
+        <div class="seg" data-k="corner">
+          <button type="button" data-value="bottom-left">Bottom left</button>
+          <button type="button" data-value="bottom-right">Bottom right</button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <div>
+          <div class="name">Dismissible</div>
+          <p class="desc">Visitors can close it; the choice is remembered per campaign ID.</p>
+        </div>
+        <div class="seg" data-k="dismissible">
+          <button type="button" data-value="true">Yes</button>
+          <button type="button" data-value="false">No</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Text</label>
+        <input data-k="text" placeholder="e.g. Summer special: 2 months free on annual plans">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>CTA label</label>
+          <input data-k="ctaLabel" placeholder="See plans">
+        </div>
+        <div class="field">
+          <label>CTA link</label>
+          <input data-k="ctaHref" placeholder="pricing.html">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Delay (seconds)</label>
+          <input data-k="delaySeconds" type="number" min="0" step="1">
+          <span class="hint">Wait before the banner appears. 0 = immediately.</span>
+        </div>
+        <div class="field">
+          <label>Campaign ID</label>
+          <input data-k="id">
+          <span class="hint">Dismissals are stored per ID — change it to re-show the banner.</span>
+        </div>
+      </div>
+
+      <div class="preview-label">Preview (delay ignored)</div>
+      <div class="banner-preview"></div>
+    </div>
+  </template>
+
   <script src="assets/site.js"></script>
   <script>
     (function () {
       var C = window.PamConfig;
-      var published = null;                                   // merged published config
+      var published = null;                       // merged published config
       var hasDraft = !!C.getDraft();
-      var model = C.merge(C.defaults, C.getDraft());          // working copy
+      var model = C.normalize(C.getDraft());      // working copy
 
       /* ---------- helpers ---------- */
       function get(obj, path) {
@@ -399,16 +451,20 @@
         if (v === "false") return false;
         return v;
       }
-      /* Both sides are merged from the same defaults, so key order matches. */
+      /* Both sides are normalized through the same schema, so key order matches. */
       function same(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
 
-      function onEdit() {
+      function saveDraft() {
         hasDraft = true;
         C.setDraft(model);
+        renderStatus();
+      }
+      function onEdit() {   // for global controls: also repaint them
+        saveDraft();
         render();
       }
 
-      /* ---------- inputs ---------- */
+      /* ---------- global inputs (presentation, tracking, integrations) ---------- */
       document.querySelectorAll(".seg[data-path]").forEach(function (group) {
         group.addEventListener("click", function (e) {
           var btn = e.target.closest("button[data-value]");
@@ -420,11 +476,10 @@
       document.querySelectorAll("[data-field]").forEach(function (input) {
         input.addEventListener("input", function () {
           set(model, input.dataset.field, input.value);
-          onEdit();
+          saveDraft();
         });
       });
 
-      /* ---------- render ---------- */
       function render() {
         document.querySelectorAll(".seg[data-path]").forEach(function (group) {
           var val = get(model, group.dataset.path);
@@ -437,23 +492,100 @@
           var val = get(model, input.dataset.field);
           input.value = val == null ? "" : val;
         });
-        renderBannerPreview();
         renderStatus();
       }
 
-      function renderBannerPreview() {
-        var box = document.getElementById("banner-preview");
-        box.innerHTML = "";
-        if (!model.banner.text) {
-          var hint = document.createElement("span");
-          hint.className = "empty";
-          hint.textContent = "Add a text to preview the banner";
-          box.appendChild(hint);
+      /* ---------- banner list ---------- */
+      var listEl = document.getElementById("banner-list");
+      var tpl = document.getElementById("banner-tpl");
+
+      function newBannerId() { return "banner-" + Date.now().toString(36); }
+
+      document.getElementById("add-banner").addEventListener("click", function () {
+        model.banners.push(C.merge(C.bannerDefaults, { id: newBannerId() }));
+        saveDraft();
+        renderBannerList();
+      });
+
+      function renderBannerList() {
+        listEl.innerHTML = "";
+        if (!model.banners.length) {
+          var note = document.createElement("p");
+          note.className = "empty-note";
+          note.textContent = "No banners yet — add one below.";
+          listEl.appendChild(note);
           return;
         }
-        box.appendChild(C.buildBannerElement(model.banner, true));
+        model.banners.forEach(function (b, i) {
+          listEl.appendChild(buildBannerItem(b, i));
+        });
       }
 
+      function buildBannerItem(b, i) {
+        var node = tpl.content.firstElementChild.cloneNode(true);
+        node.querySelector(".banner-item-title").textContent = "Banner " + (i + 1);
+
+        node.querySelector(".remove").addEventListener("click", function () {
+          model.banners.splice(i, 1);
+          saveDraft();
+          renderBannerList();   // rebuild: indices shift
+        });
+
+        var previewBox = node.querySelector(".banner-preview");
+        function paintPreview() {
+          previewBox.innerHTML = "";
+          if (!b.text) {
+            var hint = document.createElement("span");
+            hint.className = "empty";
+            hint.textContent = "Add a text to preview";
+            previewBox.appendChild(hint);
+            return;
+          }
+          previewBox.appendChild(C.buildBannerElement(b, true));
+        }
+        function updateCornerVisibility() {
+          node.querySelector('[data-show="corner"]').style.display =
+            b.style === "bar" ? "none" : "";
+        }
+
+        node.querySelectorAll(".seg[data-k]").forEach(function (group) {
+          var k = group.dataset.k;
+          function paint() {
+            group.querySelectorAll("button").forEach(function (btn) {
+              btn.setAttribute("aria-pressed", parseValue(btn.dataset.value) === b[k] ? "true" : "false");
+            });
+          }
+          group.addEventListener("click", function (e) {
+            var btn = e.target.closest("button[data-value]");
+            if (!btn) return;
+            b[k] = parseValue(btn.dataset.value);
+            paint();
+            updateCornerVisibility();
+            paintPreview();
+            saveDraft();
+          });
+          paint();
+        });
+
+        node.querySelectorAll("input[data-k]").forEach(function (inp) {
+          var k = inp.dataset.k;
+          inp.id = "b" + i + "-" + k;
+          var label = inp.closest(".field").querySelector("label");
+          if (label) label.htmlFor = inp.id;
+          inp.value = b[k] == null ? "" : b[k];
+          inp.addEventListener("input", function () {
+            b[k] = inp.type === "number" ? (parseFloat(inp.value) || 0) : inp.value;
+            paintPreview();
+            saveDraft();
+          });
+        });
+
+        paintPreview();
+        updateCornerVisibility();
+        return node;
+      }
+
+      /* ---------- publish status & actions ---------- */
       function renderStatus() {
         var el = document.getElementById("publish-status");
         if (!published) { el.textContent = "Loading published config…"; return; }
@@ -466,7 +598,6 @@
         }
       }
 
-      /* ---------- publish actions ---------- */
       function exportJSON() { return JSON.stringify(model, null, 2) + "\n"; }
       function flash(id, msg) {
         var btn = document.getElementById(id);
@@ -492,8 +623,9 @@
       document.getElementById("discard").addEventListener("click", function () {
         C.setDraft(null);
         hasDraft = false;
-        model = C.merge(C.defaults, published || {});
+        model = C.normalize(published || {});
         render();
+        renderBannerList();
       });
 
       /* ---------- load published config for status/diff ---------- */
@@ -501,9 +633,10 @@
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; })
         .then(function (pub) {
-          published = C.merge(C.defaults, pub || {});
+          published = C.normalize(pub || {});
           if (!hasDraft) {
-            model = C.merge(C.defaults, published);
+            model = C.normalize(published);
+            renderBannerList();
           } else if (same(model, published)) {
             // draft got published in the meantime — clear it
             C.setDraft(null);
@@ -513,6 +646,7 @@
         });
 
       render();
+      renderBannerList();
     })();
   </script>
 </body>

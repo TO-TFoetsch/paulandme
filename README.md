@@ -32,8 +32,9 @@ every page:
 
 - **Presentation** — theme (Cream/Navy), hand illustrations, text contrast,
   animations, homepage hero variant A / B / C
-- **Banner & Störer** — a site-wide announcement as a top bar or a floating
-  round Störer: text, CTA, dismissible (dismissals stored per campaign ID)
+- **Banners** — any number of site-wide messages: top bar, floating round
+  Störer or corner card; each with text, CTA, corner, show-delay and
+  dismissible flag (dismissals stored per campaign ID)
 - **Tracking** — Google Tag Manager, GA4, Meta Pixel, LinkedIn Insight Tag,
   plus a raw custom `<head>` HTML slot for anything else
 - **Integrations** — HubSpot tracking/chat loader (portal ID + EU/US data center)

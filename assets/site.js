@@ -1,5 +1,5 @@
 /* Paul & Me — shared site behavior
-   - Site config (assets/site-config.json): presentation, banner/Störer,
+   - Site config (assets/site-config.json): presentation, banners/Störer,
      tracking pixels, integrations. Edited on cms.html, which stores a
      draft in localStorage; the draft is previewed in this browser only,
      until the exported JSON is committed as assets/site-config.json.
@@ -12,7 +12,7 @@
   var CONFIG_URL = "assets/site-config.json";
   var LS_DRAFT = "pam-config-draft";
   var LS_CACHE = "pam-config-cache";
-  var LS_BANNER_DISMISSED = "pam-banner-dismissed";
+  var LS_BANNERS_DISMISSED = "pam-banners-dismissed";
   var IS_CMS = /(^|\/)cms\.html$/.test(location.pathname);
 
   var CONFIG_DEFAULTS = {
@@ -24,15 +24,7 @@
       motion: "on",       // scroll reveal + hover lifts
       hero: "A"           // homepage hero variant A | B | C
     },
-    banner: {
-      enabled: false,
-      style: "bar",       // "bar" (top banner) | "sticker" (floating Störer)
-      text: "",
-      ctaLabel: "",
-      ctaHref: "",
-      dismissible: true,
-      id: "campaign-1"    // dismissals are stored per id
-    },
+    banners: [],          // list of banner objects — see BANNER_DEFAULTS
     tracking: {
       gtmId: "",              // GTM-XXXXXXX
       ga4Id: "",              // G-XXXXXXXXXX
@@ -49,6 +41,19 @@
     }
   };
 
+  /* One entry in config.banners */
+  var BANNER_DEFAULTS = {
+    id: "",                  // dismissals are stored per id
+    enabled: true,
+    style: "bar",            // "bar" (top) | "sticker" (round Störer) | "card" (corner card)
+    corner: "bottom-right",  // "bottom-left" | "bottom-right" — sticker/card only
+    text: "",
+    ctaLabel: "",
+    ctaHref: "",
+    dismissible: true,
+    delaySeconds: 0          // wait n seconds before showing
+  };
+
   function readJSON(key) {
     try { return JSON.parse(localStorage.getItem(key) || "null"); }
     catch (e) { return null; }
@@ -57,21 +62,30 @@
     try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
   }
 
-  /* Deep-merge `extra` onto `base`; only keys the schema knows survive. */
+  /* Deep-merge `extra` onto `base`; only keys the schema knows survive.
+     Arrays are taken wholesale from `extra` (items sanitized separately). */
   function mergeConfig(base, extra) {
     var out = {};
     Object.keys(base).forEach(function (k) {
       var b = base[k];
       var e = extra ? extra[k] : undefined;
-      if (b !== null && typeof b === "object") out[k] = mergeConfig(b, e);
+      if (Array.isArray(b)) out[k] = Array.isArray(e) ? e : b;
+      else if (b !== null && typeof b === "object") out[k] = mergeConfig(b, e);
       else out[k] = (e === undefined ? b : e);
     });
     return out;
   }
 
+  /* Merge onto the schema and sanitize each banner item. */
+  function normalizeConfig(raw) {
+    var c = mergeConfig(CONFIG_DEFAULTS, raw);
+    c.banners = c.banners.map(function (b) { return mergeConfig(BANNER_DEFAULTS, b); });
+    return c;
+  }
+
   var draft = readJSON(LS_DRAFT);
   var cache = readJSON(LS_CACHE);
-  var config = mergeConfig(CONFIG_DEFAULTS, draft || cache);
+  var config = normalizeConfig(draft || cache);
 
   function applyPresentation() {
     var p = config.presentation;
@@ -83,11 +97,20 @@
     root.dataset.hero = p.hero;
   }
 
-  /* ---------- Banner / Störer ---------- */
+  /* ---------- Banners / Störer ---------- */
+  function dismissedIds() { return readJSON(LS_BANNERS_DISMISSED) || []; }
+  function addDismissed(id) {
+    var ids = dismissedIds();
+    if (ids.indexOf(String(id)) === -1) ids.push(String(id));
+    writeJSON(LS_BANNERS_DISMISSED, ids);
+  }
+
   function buildBannerElement(b, preview) {
-    var isSticker = b.style === "sticker";
+    var styleClass = b.style === "sticker" ? "site-banner-sticker"
+                   : b.style === "card" ? "site-banner-card"
+                   : "site-banner-bar";
     var el = document.createElement("aside");
-    el.className = "site-banner " + (isSticker ? "site-banner-sticker" : "site-banner-bar");
+    el.className = "site-banner " + styleClass;
     el.setAttribute("aria-label", "Announcement");
 
     var text = document.createElement("p");
@@ -112,7 +135,7 @@
       close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
       close.addEventListener("click", function () {
         if (preview) return;
-        try { localStorage.setItem(LS_BANNER_DISMISSED, String(b.id)); } catch (e) {}
+        addDismissed(b.id);
         el.remove();
       });
       el.appendChild(close);
@@ -120,16 +143,50 @@
     return el;
   }
 
-  function initBanner() {
-    var b = config.banner;
-    if (!b.enabled || !b.text) return;
-    var dismissed = null;
-    try { dismissed = localStorage.getItem(LS_BANNER_DISMISSED); } catch (e) {}
-    if (b.dismissible && dismissed === String(b.id)) return;
+  /* Stack containers: bars share one block at the very top; corner
+     banners (Störer, cards) stack in their corner without overlapping. */
+  var topStack = null;
+  var cornerStacks = {};
+  function getTopStack() {
+    if (!topStack) {
+      topStack = document.createElement("div");
+      topStack.className = "banner-top-stack";
+      document.body.insertBefore(topStack, document.body.firstChild);
+    }
+    return topStack;
+  }
+  function getCornerStack(corner) {
+    if (!cornerStacks[corner]) {
+      var c = document.createElement("div");
+      c.className = "banner-corner " + (corner === "bottom-left" ? "bl" : "br");
+      document.body.appendChild(c);
+      cornerStacks[corner] = c;
+    }
+    return cornerStacks[corner];
+  }
 
-    var el = buildBannerElement(b, false);
-    if (b.style === "sticker") document.body.appendChild(el);
-    else document.body.insertBefore(el, document.body.firstChild);
+  function initBanners() {
+    var dismissed = dismissedIds();
+
+    config.banners.forEach(function (b) {
+      if (!b.enabled || !b.text) return;
+      if (b.dismissible && dismissed.indexOf(String(b.id)) !== -1) return;
+
+      function show() {
+        var el = buildBannerElement(b, false);
+        el.classList.add("banner-enter");
+        if (b.style === "bar") getTopStack().appendChild(el);
+        else getCornerStack(b.corner).appendChild(el);
+        // double rAF so the entrance transition actually plays
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { el.classList.remove("banner-enter"); });
+        });
+      }
+
+      var delay = Number(b.delaySeconds) || 0;
+      if (delay > 0) setTimeout(show, delay * 1000);
+      else show();
+    });
   }
 
   /* ---------- Tracking & integrations ---------- */
@@ -203,21 +260,24 @@
     el.className = "draft-badge";
     el.href = "cms.html";
     el.textContent = "Draft preview · CMS";
-    document.body.appendChild(el);
+    // joins the bottom-right stack so it never overlaps corner banners
+    getCornerStack("bottom-right").appendChild(el);
   }
 
   /* Public API for the mini CMS (cms.html) */
   window.PamConfig = {
     defaults: CONFIG_DEFAULTS,
+    bannerDefaults: BANNER_DEFAULTS,
     url: CONFIG_URL,
     merge: mergeConfig,
+    normalize: normalizeConfig,
     buildBannerElement: buildBannerElement,
     getDraft: function () { return draft; },
     setDraft: function (d) {
       draft = d || null;
       if (draft) writeJSON(LS_DRAFT, draft);
       else { try { localStorage.removeItem(LS_DRAFT); } catch (e) {} }
-      config = mergeConfig(CONFIG_DEFAULTS, draft || cache);
+      config = normalizeConfig(draft || cache);
       applyPresentation();
     },
     active: function () { return config; }
@@ -225,16 +285,16 @@
 
   applyPresentation();   // synchronous first paint from draft/cache
 
-  /* Fetch the published config, then wire up banner + tracking once. */
+  /* Fetch the published config, then wire up banners + tracking once. */
   fetch(CONFIG_URL, { cache: "no-store" })
     .then(function (r) { return r.ok ? r.json() : null; })
     .catch(function () { return null; })
     .then(function (published) {
       if (published) { cache = published; writeJSON(LS_CACHE, published); }
-      config = mergeConfig(CONFIG_DEFAULTS, draft || cache);
+      config = normalizeConfig(draft || cache);
       applyPresentation();
       if (!IS_CMS) {
-        initBanner();
+        initBanners();
         initTracking();
         initDraftBadge();
       }

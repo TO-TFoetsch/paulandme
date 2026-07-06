@@ -634,12 +634,35 @@ html[data-theme="light"][data-contrast="on"] .on-navy a:hover {
 }
 
 /* =========================================================
-   SITE BANNER / STÖRER  (CMS: banner)
+   SITE BANNERS / STÖRER  (CMS: banners)
    Rendered by site.js from assets/site-config.json.
+   Bars stack in .banner-top-stack at the very top; Störer and
+   cards stack per corner in .banner-corner containers.
    ========================================================= */
+.banner-top-stack { position: relative; z-index: 60; }
+.banner-corner {
+  position: fixed;
+  bottom: 14px;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  max-width: calc(100vw - 28px);
+}
+.banner-corner.br { right: 14px; }
+.banner-corner.bl { left: 14px; align-items: flex-start; }
+
+.site-banner {
+  transition: opacity .45s var(--ease-out), transform .45s var(--ease-out);
+}
+.site-banner.banner-enter { opacity: 0; }
+.site-banner-bar.banner-enter { transform: translateY(-10px); }
+.site-banner-card.banner-enter { transform: translateY(14px); }
+.site-banner-sticker.banner-enter { transform: rotate(-6deg) translateY(14px) scale(.92); }
+
 .site-banner-bar {
   position: relative;
-  z-index: 60;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -683,10 +706,7 @@ html[data-theme="light"][data-contrast="on"] .on-navy a:hover {
 
 /* Störer — floating round badge, brand-style rotated */
 .site-banner-sticker {
-  position: fixed;
-  left: 18px;
-  bottom: 18px;
-  z-index: 90;
+  position: relative;
   width: 170px;
   height: 170px;
   border-radius: 999px;
@@ -736,16 +756,68 @@ html[data-theme="light"][data-contrast="on"] .on-navy a:hover {
 }
 .site-banner-sticker .banner-close svg { width: 13px; height: 13px; }
 @media (max-width: 600px) {
-  .site-banner-sticker { width: 138px; height: 138px; left: 10px; bottom: 10px; padding: 16px; }
+  .site-banner-sticker { width: 138px; height: 138px; padding: 16px; }
   .site-banner-sticker .banner-text { font-size: 13px; }
 }
 
-/* Badge shown while an unpublished CMS draft is active in this browser */
+/* Corner card — small dismissible message card */
+.site-banner-card {
+  position: relative;
+  width: min(340px, calc(100vw - 28px));
+  background: var(--site-card);
+  color: var(--site-fg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.site-banner-card .banner-text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  padding-right: 22px;
+}
+.site-banner-card .banner-cta {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-size: 13px;
+  color: var(--pam-pink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.site-banner-card .banner-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--site-fg);
+  opacity: .6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.site-banner-card .banner-close:hover { opacity: 1; background: rgba(0,30,80,.08); }
+html[data-theme="dark"] .site-banner-card .banner-close:hover { background: rgba(255,255,255,.12); }
+.site-banner-card .banner-close svg { width: 14px; height: 14px; }
+
+/* Accessible-contrast mode darkens all links — banner CTAs on pink
+   surfaces must stay white (the darker pink would vanish on pink). */
+html[data-theme="light"][data-contrast="on"] .site-banner-bar .banner-cta,
+html[data-theme="light"][data-contrast="on"] .site-banner-sticker .banner-cta { color: #fff; }
+html[data-theme="light"][data-contrast="on"] .site-banner-bar .banner-cta:hover,
+html[data-theme="light"][data-contrast="on"] .site-banner-sticker .banner-cta:hover { color: var(--pam-navy); }
+
+/* Badge shown while an unpublished CMS draft is active in this browser
+   (rendered inside the bottom-right .banner-corner stack) */
 .draft-badge {
-  position: fixed;
-  right: 14px;
-  bottom: 14px;
-  z-index: 95;
   background: var(--pam-navy);
   color: #fff;
   font-family: var(--font-display);
@@ -758,3 +830,6 @@ html[data-theme="light"][data-contrast="on"] .on-navy a:hover {
   text-decoration: none;
 }
 .draft-badge:hover { background: var(--pam-pink); color: #fff; }
+/* keep the badge text white in accessible-contrast mode (it's an <a>) */
+html[data-theme="light"][data-contrast="on"] .draft-badge,
+html[data-theme="light"][data-contrast="on"] .draft-badge:hover { color: #fff; }

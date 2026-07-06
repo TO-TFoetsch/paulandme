@@ -7,15 +7,7 @@
     "motion": "on",
     "hero": "A"
   },
-  "banner": {
-    "enabled": false,
-    "style": "bar",
-    "text": "",
-    "ctaLabel": "",
-    "ctaHref": "",
-    "dismissible": true,
-    "id": "campaign-1"
-  },
+  "banners": [],
   "tracking": {
     "gtmId": "",
     "ga4Id": "",
