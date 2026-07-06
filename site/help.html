@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-hands="on">
+<head>
+  <meta charset="utf-8">
+  <title>Help &amp; FAQ — Paul &amp; Me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-blue-letters.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .page-hero { padding: 40px 0 24px; position: relative; }
+    @media (min-width: 768px) { .page-hero { padding: 64px 0 32px; } }
+    .page-hero h1 { font-size: clamp(36px, 6.5vw, 60px); max-width: 14ch; }
+    .page-hero .lead { margin-top: 18px; max-width: 580px; }
+    .page-hero .hand-deco {
+      position: absolute;
+      width: 180px;
+      top: 0; right: -30px;
+      transform: rotate(-12deg);
+      opacity: .9;
+    }
+    @media (min-width: 768px) { .page-hero .hand-deco { width: 220px; right: 5%; top: 30px; } }
+
+    /* Search */
+    .help-search {
+      position: relative;
+      max-width: 520px;
+      margin-top: 28px;
+    }
+    .help-search input {
+      width: 100%;
+      padding: 18px 24px 18px 56px;
+      font-size: 16px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--site-card);
+      color: var(--site-fg);
+      box-shadow: var(--shadow-md);
+      font-family: var(--font-body);
+    }
+    .help-search input:focus { outline: none; box-shadow: var(--shadow-lg), 0 0 0 3px rgba(245,80,125,.3); }
+    .help-search svg {
+      position: absolute;
+      left: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px; height: 20px;
+      color: var(--pam-pink);
+    }
+
+    /* Category cards */
+    .cat-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
+    @media (min-width: 600px) { .cat-grid { grid-template-columns: 1fr 1fr; gap: 20px; } }
+    @media (min-width: 900px) { .cat-grid { grid-template-columns: repeat(4, 1fr); } }
+    .cat-card {
+      background: var(--site-card);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform var(--dur-base), box-shadow var(--dur-base);
+    }
+    .cat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); color: inherit; }
+    .cat-card .ico {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--pam-pink-100); color: var(--pam-pink);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cat-card h2 { font-size: 18px; }
+    .cat-card p { font-size: 13px; opacity: .75; }
+    .cat-card .count {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--pam-pink);
+      letter-spacing: .06em;
+      margin-top: auto;
+    }
+
+    /* FAQ list grouped */
+    .faq-group { margin-top: 56px; }
+    .faq-group h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .faq-group h2 small {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: none;
+      letter-spacing: 0;
+      opacity: .75;
+      margin-top: 6px;
+    }
+
+    details.faq-item {
+      background: var(--site-card);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 12px;
+    }
+    details.faq-item summary {
+      cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 15px;
+      color: var(--site-fg);
+    }
+    details.faq-item summary::-webkit-details-marker { display: none; }
+    details.faq-item summary::after {
+      content: "+";
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--pam-pink);
+      transition: transform var(--dur-base) var(--ease-out);
+    }
+    details.faq-item[open] summary::after { transform: rotate(45deg); }
+    details.faq-item p { margin-top: 12px; font-size: 14px; opacity: .85; line-height: 1.55; }
+
+    /* Help CTA */
+    .help-cta {
+      background: var(--site-card);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      margin-top: 56px;
+    }
+    @media (min-width: 768px) { .help-cta { padding: 48px; text-align: left; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; } }
+    .help-cta h3 { font-size: 22px; margin-bottom: 8px; }
+    .help-cta p { font-size: 15px; opacity: .85; }
+    .help-cta .actions { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    @media (min-width: 768px) { .help-cta .actions { margin-top: 0; justify-content: flex-end; } }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img class="light-only" src="assets/logo-blue-full.svg" alt="Paul &amp; Me"><img class="dark-only" src="assets/logo-white-full.svg" alt="Paul &amp; Me"></a>
+      <ul class="nav-links">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="help.html" aria-current="page">Help</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log in</a></li>
+      </ul>
+      <a class="nav-cta slab sm" href="signup.html"><span class="back">Get started</span><span class="face">Get started</span></a>
+      <button class="nav-toggle" aria-label="Open menu" aria-controls="drawer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="13" x2="20" y2="13"/><line x1="4" y1="19" x2="20" y2="19"/></svg></button>
+    </div>
+  </nav>
+  <aside class="nav-drawer" id="drawer" data-open="false" aria-label="Mobile menu">
+    <div class="nav-drawer-top">
+      <img class="light-only" src="assets/logo-blue-full.svg" alt="" style="height:36px">
+      <img class="dark-only" src="assets/logo-white-full.svg" alt="" style="height:36px">
+      <button class="drawer-close nav-toggle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    </div>
+    <ul>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="help.html" aria-current="page">Help</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Log in</a></li>
+    </ul>
+    <a class="drawer-cta slab block lg" href="signup.html"><span class="back">Get started</span><span class="face">Get started</span></a>
+  </aside>
+
+  <main id="main">
+
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow">Help center</span>
+        <h1>How can Paul help?</h1>
+        <p class="lead">Short answers to common questions. If something's missing, the team's a click away.</p>
+        <div class="help-search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.6" y2="16.6"/></svg>
+          <input type="search" placeholder="Search the help center…" id="help-q">
+        </div>
+      </div>
+      <div class="hand-deco" aria-hidden="true">
+        <img src="assets/hand-pointer.png" alt="">
+      </div>
+    </section>
+
+    <!-- ================= CATEGORIES ================= -->
+    <section style="padding-top: 24px;">
+      <div class="container">
+        <div class="cat-grid">
+          <a class="cat-card" href="#getting-started">
+            <div class="ico"><span data-lucide="rocket"></span></div>
+            <h2>Getting started</h2>
+            <p>Sign up, set up your first listing, embed the widget.</p>
+            <span class="count">8 articles</span>
+          </a>
+          <a class="cat-card" href="#bookings">
+            <div class="ico"><span data-lucide="calendar-check"></span></div>
+            <h2>Bookings &amp; calendar</h2>
+            <p>iCal sync, blocking dates, double-booking protection.</p>
+            <span class="count">12 articles</span>
+          </a>
+          <a class="cat-card" href="#pricing-payments">
+            <div class="ico"><span data-lucide="banknote"></span></div>
+            <h2>Pricing &amp; payments</h2>
+            <p>Rate rules, Stripe, SEPA, invoices and VAT.</p>
+            <span class="count">9 articles</span>
+          </a>
+          <a class="cat-card" href="#account">
+            <div class="ico"><span data-lucide="settings"></span></div>
+            <h2>Account &amp; billing</h2>
+            <p>Plan changes, invoices, cancellation, password reset.</p>
+            <span class="count">7 articles</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section style="background: var(--site-bg-2);">
+      <div class="container" style="max-width: 820px;">
+
+        <div class="faq-group" id="getting-started">
+          <h2>Getting started <small>The basics — from sign-up to your first booking.</small></h2>
+          <details class="faq-item">
+            <summary>How long does setup take?</summary>
+            <p>Most hosts have their first listing live within an afternoon. The longest part is uploading photos — Paul handles the rest with smart defaults you can tune later.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Do I need my own website?</summary>
+            <p>No. If you don't have a site, Paul gives you a hosted booking link you can put in your Instagram bio, email signature or print materials.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How do I embed the booking widget?</summary>
+            <p>From your dashboard → Widget → Embed. Copy one line of code into your website. WordPress, Squarespace, plain HTML — all supported.</p>
+          </details>
+        </div>
+
+        <div class="faq-group" id="bookings">
+          <h2>Bookings &amp; calendar <small>Sync, blocking, and avoiding double bookings.</small></h2>
+          <details class="faq-item">
+            <summary>Does Paul sync with Airbnb / Booking.com?</summary>
+            <p>Yes, via iCal. Add your Airbnb iCal URL in Calendar → Sync. Paul reads incoming bookings and exposes its own iCal feed for the other direction.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How does Paul prevent double bookings?</summary>
+            <p>The widget shows live availability. The moment a booking lands, Paul updates your calendar and the external iCal feed within 30 seconds.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I block individual dates?</summary>
+            <p>Yes. Click and drag in the calendar to block, hold or open a range. Add a note (e.g. "owner's stay") so you remember why.</p>
+          </details>
+        </div>
+
+        <div class="faq-group" id="pricing-payments">
+          <h2>Pricing &amp; payments <small>Rates, taxes, payouts.</small></h2>
+          <details class="faq-item">
+            <summary>Is there really no commission?</summary>
+            <p>Yes, really. You pay a monthly subscription — nothing per booking. Whatever your guest pays lands in your account minus payment-processor fees, which Paul doesn't take a cut of either.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How do I get paid?</summary>
+            <p>Connect Stripe (cards) or SEPA (bank transfer) in Settings → Payments. Payouts go directly to your bank account on a schedule you choose.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does Paul handle VAT?</summary>
+            <p>Yes. Set your VAT rate per property. Auto-generated invoices include the correct breakdown for German and EU bookings.</p>
+          </details>
+        </div>
+
+        <div class="faq-group" id="account">
+          <h2>Account &amp; billing <small>Plan, password, cancellation.</small></h2>
+          <details class="faq-item">
+            <summary>How do I switch plans?</summary>
+            <p>Settings → Plan. Switch up or down at any time — the change applies at your next billing cycle.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How do I cancel my account?</summary>
+            <p>Settings → Plan → Cancel. No phone calls, no retention agents. Your data stays for 30 days in case you change your mind, then we delete it.</p>
+          </details>
+          <details class="faq-item">
+            <summary>I forgot my password — what now?</summary>
+            <p>From the <a href="login.html">login page</a> click "Forgot password?". We'll email you a reset link valid for 60 minutes.</p>
+          </details>
+        </div>
+
+        <div class="help-cta">
+          <div>
+            <h3>Can't find what you're looking for?</h3>
+            <p>Paul's team is small but quick. Most tickets get a reply within 2 hours during business days.</p>
+          </div>
+          <div class="actions">
+            <a class="slab md" href="contact.html"><span class="back">Contact support</span><span class="face">Contact support</span></a>
+            <a class="slab white md" href="tel:+497153925050"><span class="back">Call us</span><span class="face">Call us</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="assets/logo-white-full.svg" alt="Paul &amp; Me">
+          <p>A smart, intuitive solution for renting out vacation homes online.</p>
+        </div>
+        <div><h2>Product</h2><ul><li><a href="features.html">Features</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="signup.html">Get started</a></li></ul></div>
+        <div><h2>Company</h2><ul><li><a href="contact.html">Contact</a></li><li><a href="help.html">Help &amp; FAQ</a></li><li><a href="login.html">Log in</a></li></ul></div>
+        <div><h2>Reach us</h2><ul><li>07153 9250-50</li><li>help@pauland.me</li><li>Borsigstr. 26, 73249 Wernau</li></ul></div>
+      </div>
+      <div class="footer-bottom container" style="padding-left:0;padding-right:0;">
+        <span>© 2026 Paul an Me GmbH · a DIRS21 company</span>
+        <span><a href="legal.html" style="color:inherit">Impressum</a> · <a href="legal.html#privacy" style="color:inherit">Datenschutz</a> · <a href="legal.html#terms" style="color:inherit">AGB</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site.js"></script>
+  <script src="assets/icons.js"></script>
+  <script>
+
+
+    // Naive client-side filter
+    const q = document.getElementById('help-q');
+    const items = document.querySelectorAll('details.faq-item');
+    q.addEventListener('input', () => {
+      const v = q.value.trim().toLowerCase();
+      items.forEach(i => {
+        const t = i.textContent.toLowerCase();
+        i.style.display = !v || t.includes(v) ? '' : 'none';
+        if (v && t.includes(v)) i.setAttribute('open', '');
+      });
+    });
+  </script>
+</body>
+</html>

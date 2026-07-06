@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-hands="on" data-hero="A">
+<head>
+  <meta charset="utf-8">
+  <title>Paul &amp; Me — Sell your vacation rental, commission-free</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-blue-letters.svg">
+  <meta name="description" content="No commission. No jargon. No lengthy onboarding. Paul &amp; Me puts your vacation home on the market in an afternoon.">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    /* ====== HERO ====== */
+    .hero {
+      position: relative;
+      padding: 32px 0 56px;
+      overflow: hidden;
+    }
+    @media (min-width: 1024px) { .hero { padding: 64px 0 96px; } }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-grid > * { min-width: 0; }
+    @media (min-width: 900px) {
+      .hero-grid { grid-template-columns: 1.05fr 1fr; gap: 56px; }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--site-card);
+      color: var(--pam-navy);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .08em;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+    html[data-theme="dark"] .hero-eyebrow { background: rgba(255,255,255,.08); color: #fff; }
+    .hero-eyebrow .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--pam-pink); }
+
+    .hero h1 {
+      font-size: clamp(40px, 6.5vw, 72px);
+      line-height: .98;
+      overflow-wrap: break-word;
+    }
+    .hero h1 .pink { color: var(--pam-pink); }
+    .hero h1 .stretch { letter-spacing: -.01em; }
+
+    .hero-sub {
+      font-size: 17px;
+      line-height: 1.5;
+      margin-top: 18px;
+      max-width: 480px;
+      color: var(--site-fg);
+      opacity: .82;
+    }
+    @media (min-width: 768px) { .hero-sub { font-size: 19px; margin-top: 22px; } }
+
+    .hero-actions {
+      display: flex; flex-wrap: wrap; gap: 14px;
+      margin-top: 28px;
+    }
+
+    .hero-trust {
+      margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 13px;
+      color: var(--site-fg);
+      opacity: .75;
+    }
+    .hero-trust span {
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .hero-trust svg { width: 16px; height: 16px; color: var(--pam-pink); }
+
+    /* ====== Hero art — shared shell ====== */
+    .hero-art {
+      position: relative;
+      aspect-ratio: 4 / 4.4;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ===== Variant A: big circle + pointer hand peeking out ===== */
+    html[data-hero="A"] .variant-A { display: block; }
+    html[data-hero="A"] .variant-B,
+    html[data-hero="A"] .variant-C { display: none; }
+
+    .variant-A .a-card {
+      position: absolute; inset: 0;
+      background: var(--pam-pink);
+      border-radius: 999px;
+      box-shadow: var(--shadow-lg);
+    }
+    .variant-A .a-card::after {
+      content: ""; position: absolute;
+      inset: 18px; border-radius: 999px;
+      border: 3px dashed rgba(255,255,255,.35);
+    }
+    .variant-A .a-text {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #fff; text-align: center;
+      padding: 0 12%;
+    }
+    .variant-A .a-text .big {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: clamp(28px, 6.4vw, 56px);
+      line-height: .9;
+      letter-spacing: .02em;
+    }
+    .variant-A .a-text .small {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: clamp(13px, 1.6vw, 16px);
+      letter-spacing: .14em;
+      margin-top: 8px;
+      opacity: .9;
+    }
+    .variant-A .a-pill {
+      position: absolute;
+      top: -8px; right: 6%;
+      transform: rotate(8deg);
+      background: var(--pam-navy);
+      color: #fff;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: .04em;
+      padding: 12px 18px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-md);
+    }
+    .variant-A .a-hand {
+      position: absolute;
+      bottom: -6%;
+      right: -6%;
+      width: 56%;
+      transform: rotate(-12deg);
+    }
+
+    /* ===== Variant B: stack of pink cards + thumbs-up ===== */
+    html[data-hero="B"] .variant-B { display: block; }
+    html[data-hero="B"] .variant-A,
+    html[data-hero="B"] .variant-C { display: none; }
+
+    .variant-B .b-frame {
+      position: absolute; inset: 6% 4% 6% 4%;
+      background: var(--pam-pink);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 26px;
+      color: #fff;
+      display: flex; flex-direction: column;
+      gap: 16px;
+    }
+    .variant-B .b-stat {
+      background: rgba(255,255,255,.16);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      backdrop-filter: blur(4px);
+    }
+    .variant-B .b-stat .num {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 36px;
+      line-height: 1;
+    }
+    .variant-B .b-stat .lbl {
+      font-size: 12px;
+      letter-spacing: .04em;
+      opacity: .9;
+      margin-top: 4px;
+    }
+    .variant-B .b-quote {
+      margin-top: auto;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+    .variant-B .b-quote small {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      margin-top: 6px;
+      opacity: .85;
+      text-transform: none;
+    }
+    .variant-B .b-back {
+      position: absolute;
+      inset: 2% 8% 14% 0%;
+      background: var(--pam-navy);
+      border-radius: var(--radius-xl);
+      z-index: -1;
+      transform: rotate(-4deg);
+      box-shadow: var(--shadow-md);
+    }
+    .variant-B .b-hand {
+      position: absolute;
+      top: -8%;
+      right: -6%;
+      width: 38%;
+      transform: rotate(14deg);
+      z-index: 2;
+    }
+    .variant-B .b-badge {
+      position: absolute;
+      bottom: 2%;
+      left: -4%;
+      background: #fff;
+      color: var(--pam-navy);
+      border-radius: 999px;
+      padding: 14px 20px;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: .04em;
+      box-shadow: var(--shadow-md);
+      z-index: 2;
+    }
+    .variant-B .b-badge .pink { color: var(--pam-pink); }
+
+    /* ===== Variant C: phone mock with widget + hand ===== */
+    html[data-hero="C"] .variant-C { display: block; }
+    html[data-hero="C"] .variant-A,
+    html[data-hero="C"] .variant-B { display: none; }
+
+    .variant-C .c-phone {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%) rotate(-3deg);
+      width: 64%;
+      aspect-ratio: 9 / 19;
+      background: #0B0B0B;
+      border-radius: 36px;
+      padding: 8px;
+      box-shadow: 0 30px 60px rgba(0,30,80,.35);
+      max-width: 280px;
+    }
+    .variant-C .c-screen {
+      background: #fff;
+      width: 100%; height: 100%;
+      border-radius: 28px;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: hidden;
+    }
+    .variant-C .c-screen img.logo { height: 32px; margin: 0 auto 8px; }
+    .variant-C .c-row {
+      background: #F7F6F2;
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+    .variant-C .c-row .l { font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); }
+    .variant-C .c-row .v { font-size: 12px; color: var(--pam-navy); font-weight: 600; }
+    .variant-C .c-cta {
+      margin-top: auto;
+      background: var(--pam-pink);
+      color: #fff;
+      text-align: center;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .08em;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .variant-C .c-blob {
+      position: absolute;
+      inset: 10% 4% 10% 4%;
+      background: linear-gradient(135deg, var(--pam-pink) 0%, var(--pam-pink-600) 100%);
+      border-radius: 50% / 40%;
+      transform: rotate(-6deg);
+      z-index: 0;
+      opacity: .9;
+    }
+    .variant-C .c-hand {
+      position: absolute;
+      right: -4%;
+      bottom: -2%;
+      width: 38%;
+      transform: rotate(-14deg);
+      z-index: 3;
+    }
+    .variant-C .c-tag {
+      position: absolute;
+      top: 4%;
+      left: -2%;
+      background: var(--pam-navy);
+      color: #fff;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .04em;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transform: rotate(-6deg);
+      box-shadow: var(--shadow-md);
+      z-index: 3;
+    }
+
+    /* ====== Benefits ====== */
+    .benefits-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 700px) { .benefits-grid { grid-template-columns: 1fr 1fr 1fr; gap: 20px; } }
+
+    /* ====== How it works ====== */
+    .steps { display: grid; grid-template-columns: 1fr; gap: 24px; counter-reset: step; }
+    @media (min-width: 768px) { .steps { grid-template-columns: 1fr 1fr 1fr; gap: 24px; } }
+    .step { position: relative; padding-top: 64px; }
+    .step .num {
+      position: absolute; top: 0; left: 0;
+      width: 52px; height: 52px; border-radius: 999px;
+      background: var(--pam-pink); color: #fff;
+      display:flex; align-items:center; justify-content:center;
+      font-family: var(--font-display);
+      font-size: 24px;
+      box-shadow: var(--shadow-pink);
+    }
+    .step h3 { font-size: 22px; margin-bottom: 8px; }
+    .step p { font-size: 15px; opacity: .82; }
+
+    /* ====== Pricing teaser ====== */
+    .pricing-teaser { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 768px) { .pricing-teaser { grid-template-columns: 1fr 1fr; gap: 24px; } }
+    .plan-card { display: flex; flex-direction: column; gap: 10px; position: relative; }
+    .plan-card.featured { background: var(--pam-pink); color: #fff; }
+    .plan-card.featured h3,
+    .plan-card.featured .plan-price { color: #fff; }
+    .plan-card.featured .plan-price small { color: rgba(255,255,255,.85); }
+    .plan-card .plan-price {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 36px;
+      margin: 4px 0 4px;
+      color: var(--pam-navy);
+    }
+    html[data-theme="dark"] .plan-card .plan-price { color: #fff; }
+    .plan-card .plan-price small { font-size: 14px; opacity: .75; margin-left: 4px; }
+    .plan-feats { list-style: none; padding: 0; margin: 8px 0 16px; display:flex; flex-direction:column; gap: 8px; }
+    .plan-feats li { display:flex; gap: 8px; align-items:center; font-size: 14px; }
+    .plan-feats li svg { width: 16px; height: 16px; color: var(--pam-pink); flex-shrink: 0; }
+    .plan-card.featured .plan-feats li svg { color: #fff; }
+    .plan-card .featured-badge {
+      position: absolute;
+      top: -12px; right: 20px;
+      background: var(--pam-navy);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: .06em;
+    }
+
+    /* hand decorations spread around hero */
+    .hand-deco.hero-thumb-bg {
+      width: 220px;
+      top: -40px; right: -60px;
+      opacity: .12;
+      transform: rotate(-22deg);
+      z-index: 0;
+    }
+    @media (min-width: 900px) {
+      .hand-deco.hero-thumb-bg { width: 320px; top: -60px; right: -120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= NAV ================= -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Paul &amp; Me — Home">
+        <img class="light-only" src="assets/logo-blue-full.svg" alt="Paul &amp; Me">
+        <img class="dark-only" src="assets/logo-white-full.svg" alt="Paul &amp; Me">
+      </a>
+      <ul class="nav-links">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="help.html">Help</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log in</a></li>
+      </ul>
+      <a class="nav-cta slab sm" href="signup.html">
+        <span class="back">Get started</span>
+        <span class="face">Get started</span>
+      </a>
+      <button class="nav-toggle" aria-label="Open menu" aria-controls="drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="13" x2="20" y2="13"/><line x1="4" y1="19" x2="20" y2="19"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <aside class="nav-drawer" id="drawer" data-open="false" aria-label="Mobile menu">
+    <div class="nav-drawer-top">
+      <img class="light-only" src="assets/logo-blue-full.svg" alt="Paul &amp; Me" style="height:36px">
+      <img class="dark-only" src="assets/logo-white-full.svg" alt="Paul &amp; Me" style="height:36px">
+      <button class="drawer-close nav-toggle" aria-label="Close menu">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+    <ul>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Log in</a></li>
+    </ul>
+    <a class="drawer-cta slab block lg" href="signup.html">
+      <span class="back">Get started</span>
+      <span class="face">Get started</span>
+    </a>
+  </aside>
+
+  <main id="main">
+
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <!-- Big faded hand in the background -->
+      <div class="hand-deco hero-thumb-bg" aria-hidden="true">
+      </div>
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="hero-eyebrow"><span class="dot"></span> No commission · Setup in an afternoon</div>
+            <h1>
+              Selling your vacation rental online can be
+              <span class="pink">SOOOOO&nbsp;easy</span>
+            </h1>
+            <p class="hero-sub">
+              No commission. No jargon. No lengthy onboarding. Paul &amp; Me puts your vacation home on the market — and keeps every euro in your pocket.
+            </p>
+            <div class="hero-actions">
+              <a class="slab lg" href="signup.html">
+                <span class="back">Start free trial</span>
+                <span class="face">Start free trial</span>
+              </a>
+              <a class="slab white lg" href="pricing.html">
+                <span class="back">See plans</span>
+                <span class="face">See plans</span>
+              </a>
+            </div>
+            <div class="hero-trust">
+              <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 14 day free trial</span>
+              <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No credit card</span>
+              <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Cancel anytime</span>
+            </div>
+          </div>
+
+          <!-- Hero art (3 variants) -->
+          <div class="hero-art" aria-hidden="true">
+
+            <!-- ============ VARIANT A ============ -->
+            <div class="variant-A" style="position:absolute; inset:0;">
+              <div class="a-card"></div>
+              <div class="a-text">
+                <div class="big">No<br>Commission</div>
+                <div class="small">Just your guests, your home, your money</div>
+              </div>
+              <div class="a-hand hand-deco"><img src="assets/hand-thumbs-up.png" alt=""></div>
+            </div>
+
+            <!-- ============ VARIANT B ============ -->
+            <div class="variant-B" style="position:absolute; inset:0;">
+              <div class="b-back"></div>
+              <div class="b-frame">
+                <div class="b-stat">
+                  <div class="num">0%</div>
+                  <div class="lbl">Commission. Forever.</div>
+                </div>
+                <div class="b-stat">
+                  <div class="num">~45 min</div>
+                  <div class="lbl">From sign-up to first listing</div>
+                </div>
+                <div class="b-quote">
+                  "Finally a tool that works for me, not against me."
+                  <small>— Maria, 2 apartments in Berlin</small>
+                </div>
+              </div>
+              <div class="b-hand hand-deco"><img src="assets/hand-pointer.png" alt=""></div>
+              <div class="b-badge"><span class="pink">€0</span> per booking</div>
+            </div>
+
+            <!-- ============ VARIANT C ============ -->
+            <div class="variant-C" style="position:absolute; inset:0;">
+              <div class="c-blob"></div>
+              <div class="c-tag">Live demo</div>
+              <div class="c-phone">
+                <div class="c-screen">
+                  <img class="logo" src="assets/logo-blue-full.svg" alt="">
+                  <div class="c-row"><div class="l">Arrival</div><div class="v">02 June 2026</div></div>
+                  <div class="c-row"><div class="l">Departure</div><div class="v">10 June 2026</div></div>
+                  <div class="c-row"><div class="l">Guests</div><div class="v">4 Adults · 2 Children</div></div>
+                  <div class="c-cta">Book Now</div>
+                </div>
+              </div>
+              <div class="c-hand hand-deco"><img src="assets/hand-phone-blue.png" alt=""></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BENEFITS ================= -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Our best arguments</span>
+          <h2>Three reasons hosts love Paul</h2>
+          <p class="lead">Built for private hosts running one to three properties — not for hotel chains with channel managers and CPA managers.</p>
+        </div>
+        <div class="benefits-grid">
+          <article class="card lift benefit">
+            <div class="icon-tile"><span data-lucide="trending-up"></span></div>
+            <h3>Profitable</h3>
+            <p>You no longer pay commission to providers. The €4,200 you used to leave with a portal stays with you.</p>
+          </article>
+          <article class="card lift benefit">
+            <div class="icon-tile navy"><span data-lucide="zap"></span></div>
+            <h3>Plug &amp; Play</h3>
+            <p>Get started right away. Add your property, drop the booking widget on your site, and you're live the same afternoon.</p>
+          </article>
+          <article class="card lift benefit">
+            <div class="icon-tile"><span data-lucide="inbox"></span></div>
+            <h3>Organized</h3>
+            <p>One inbox for guests, one calendar for bookings, one place for prices. Quick, simple, and yours.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOW IT WORKS ================= -->
+    <section style="background: var(--site-bg-2); border-radius: 0;">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">How it works</span>
+          <h2>From "I might rent it out" to your first booking</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <h3>Add your home</h3>
+            <p>Drop in photos, the address, the basics. Paul fills in the rest with smart defaults you can override later.</p>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <h3>Embed your widget</h3>
+            <p>Paste a single line of code (or share a link). Your booking engine works from your own website, Instagram, anywhere.</p>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <h3>Get paid</h3>
+            <p>Guests book in 4 taps. You keep the full nightly rate — minus the payment processor's fees. No commission to us.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRICING TEASER ================= -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Simple pricing</span>
+          <h2>Two plans. No lock-in.</h2>
+          <p class="lead">Pick one. Switch any time. Cancel without a phone call.</p>
+        </div>
+        <div class="pricing-teaser">
+          <article class="card card-xl plan-card">
+            <h3>Foundation</h3>
+            <div class="plan-price">69,90 €<small>/ month</small></div>
+            <ul class="plan-feats">
+              <li><span data-lucide="check"></span> 1 bookable property</li>
+              <li><span data-lucide="check"></span> 5 pricing rates</li>
+              <li><span data-lucide="check"></span> Branded booking widget</li>
+              <li><span data-lucide="check"></span> Ticket &amp; chat support</li>
+            </ul>
+            <a class="slab white block md" href="pricing.html">
+              <span class="back">Choose Foundation</span>
+              <span class="face">Choose Foundation</span>
+            </a>
+          </article>
+
+          <article class="card card-xl plan-card featured">
+            <span class="featured-badge">Most popular</span>
+            <h3>Expert</h3>
+            <div class="plan-price">119,90 €<small>/ month</small></div>
+            <ul class="plan-feats">
+              <li><span data-lucide="check"></span> Unlimited properties</li>
+              <li><span data-lucide="check"></span> Unlimited pricing rates</li>
+              <li><span data-lucide="check"></span> Integrated voucher shop</li>
+              <li><span data-lucide="check"></span> Phone support</li>
+            </ul>
+            <a class="slab block md" href="pricing.html" style="--pam-pink: #fff;">
+              <span class="back" style="background: var(--pam-navy); color: var(--pam-navy);">Choose Expert</span>
+              <span class="face" style="background: #fff; color: #F5507D;">Choose Expert</span>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA BAND ================= -->
+    <section>
+      <div class="container">
+        <div class="cta-band on-navy">
+          <div>
+            <h2>Renting out your vacation home without commission?</h2>
+            <p>Set up your first listing in under an hour. We'll walk you through it — Paul's always got a helping hand.</p>
+            <div style="margin-top: 24px; display: flex; gap: 14px; flex-wrap: wrap;">
+              <a class="slab lg" href="signup.html">
+                <span class="back">Start free trial</span>
+                <span class="face">Start free trial</span>
+              </a>
+              <a class="slab white lg" href="contact.html">
+                <span class="back">Talk to us</span>
+                <span class="face">Talk to us</span>
+              </a>
+            </div>
+          </div>
+          <div class="hand-deco" style="position: relative; max-width: 260px; margin: 0 auto;">
+            <img src="assets/hand-phone-blue.png" alt="" style="transform: rotate(-8deg);">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="assets/logo-white-full.svg" alt="Paul &amp; Me">
+          <p>A smart, intuitive solution for renting out vacation homes online.</p>
+        </div>
+        <div>
+          <h2>Product</h2>
+          <ul>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="signup.html">Get started</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="help.html">Help &amp; FAQ</a></li>
+            <li><a href="login.html">Log in</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Reach us</h2>
+          <ul>
+            <li>07153 9250-50</li>
+            <li>help@pauland.me</li>
+            <li>Borsigstr. 26, 73249 Wernau</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom container" style="padding-left: 0; padding-right: 0;">
+        <span>© 2026 Paul an Me GmbH · a DIRS21 company</span>
+        <span><a href="legal.html" style="color:inherit">Impressum</a> · <a href="legal.html#privacy" style="color:inherit">Datenschutz</a> · <a href="legal.html#terms" style="color:inherit">AGB</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site.js"></script>
+  <script src="assets/icons.js"></script>
+  <script>
+    // Mark current page in nav for the home page (none of the nav items are "current")
+
+  </script>
+</body>
+</html>

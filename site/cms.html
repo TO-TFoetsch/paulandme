@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-hands="on">
+<head>
+  <meta charset="utf-8">
+  <title>Site settings — Paul &amp; Me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-blue-letters.svg">
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .cms-head {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 760px; margin: 0 auto; padding: 20px 24px 0;
+    }
+    .cms-head img { height: 38px; }
+    .cms-head .back { font-size: 15px; font-weight: 500; }
+
+    .cms-wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    .cms-intro { padding: 40px 0 8px; }
+    .cms-intro h1 { font-size: clamp(30px, 5vw, 44px); }
+    .cms-intro p { margin-top: 12px; max-width: 560px; opacity: .85; }
+
+    .cms-card {
+      background: var(--site-card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+      margin: 24px 0 48px;
+    }
+    @media (min-width: 600px) { .cms-card { padding: 32px; } }
+
+    .setting {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--site-line);
+    }
+    .setting:first-child { padding-top: 0; }
+    .setting:last-of-type { border-bottom: 0; padding-bottom: 0; }
+    @media (min-width: 600px) {
+      .setting { grid-template-columns: 1fr 260px; gap: 24px; align-items: center; }
+    }
+    .setting .name {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: 14px;
+      color: var(--site-fg);
+    }
+    .setting .desc { font-size: 13px; color: var(--site-fg); opacity: .65; margin-top: 4px; }
+
+    .seg {
+      display: flex; gap: 0;
+      background: var(--pam-cream);
+      border-radius: 12px;
+      padding: 4px;
+    }
+    html[data-theme="dark"] .seg { background: var(--pam-navy-700); }
+    .seg button {
+      flex: 1;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .04em;
+      padding: 9px 10px;
+      border: 0;
+      background: transparent;
+      color: var(--site-fg);
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .seg button[aria-pressed="true"] { background: var(--pam-pink); color: #fff; }
+
+    .cms-actions {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+      margin-top: 24px; padding-top: 20px;
+      border-top: 1px solid var(--site-line);
+    }
+    .cms-actions .reset {
+      background: transparent;
+      border: 1.5px solid var(--field-border);
+      color: var(--site-fg);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+    .cms-actions .reset:hover { border-color: var(--pam-pink); color: var(--pam-pink); }
+    .cms-actions .hint { font-size: 13px; opacity: .6; }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="cms-head">
+    <a href="index.html" aria-label="Paul &amp; Me — Home">
+      <img class="light-only" src="assets/logo-blue-full.svg" alt="Paul &amp; Me">
+      <img class="dark-only" src="assets/logo-white-full.svg" alt="Paul &amp; Me">
+    </a>
+    <a class="back" href="index.html">← View site</a>
+  </header>
+
+  <main id="main" class="cms-wrap">
+    <div class="cms-intro">
+      <span class="eyebrow">Mini CMS</span>
+      <h1>Site settings</h1>
+      <p>These options control how the whole website is presented. They are saved in this browser and applied on every page.</p>
+    </div>
+
+    <div class="cms-card">
+      <div class="setting">
+        <div>
+          <div class="name" id="lbl-theme">Theme</div>
+          <p class="desc">Cream is the standard brand look; Navy is the dark variant.</p>
+        </div>
+        <div class="seg" role="group" aria-labelledby="lbl-theme" data-setting="theme">
+          <button data-value="light">Cream</button>
+          <button data-value="dark">Navy</button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <div>
+          <div class="name" id="lbl-hands">Hand illustrations</div>
+          <p class="desc">The signature Paul hands on heroes and CTA bands.</p>
+        </div>
+        <div class="seg" role="group" aria-labelledby="lbl-hands" data-setting="hands">
+          <button data-value="on">Show</button>
+          <button data-value="off">Hide</button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <div>
+          <div class="name" id="lbl-contrast">Text contrast</div>
+          <p class="desc">Accessible darkens text-sized pink and captions to meet WCAG&nbsp;AA (4.5:1).</p>
+        </div>
+        <div class="seg" role="group" aria-labelledby="lbl-contrast" data-setting="contrast">
+          <button data-value="on">Accessible</button>
+          <button data-value="off">Original</button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <div>
+          <div class="name" id="lbl-motion">Animations</div>
+          <p class="desc">Scroll reveals and card hover lifts. Users with a reduced-motion preference never see them, regardless of this setting.</p>
+        </div>
+        <div class="seg" role="group" aria-labelledby="lbl-motion" data-setting="motion">
+          <button data-value="on">On</button>
+          <button data-value="off">Off</button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <div>
+          <div class="name" id="lbl-hero">Hero variant</div>
+          <p class="desc">Homepage only — A: pink circle &amp; thumbs-up, B: stat card &amp; quote, C: phone mockup.</p>
+        </div>
+        <div class="seg" role="group" aria-labelledby="lbl-hero" data-setting="hero">
+          <button data-value="A">A</button>
+          <button data-value="B">B</button>
+          <button data-value="C">C</button>
+        </div>
+      </div>
+
+      <div class="cms-actions">
+        <button class="reset" id="reset">Reset to defaults</button>
+        <span class="hint">Defaults: Cream · hands on · accessible contrast · animations on · hero A</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/site.js"></script>
+  <script>
+    (function () {
+      var groups = document.querySelectorAll(".seg[data-setting]");
+
+      function render() {
+        groups.forEach(function (group) {
+          var key = group.dataset.setting;
+          group.querySelectorAll("button").forEach(function (b) {
+            b.setAttribute("aria-pressed", b.dataset.value === PamSettings.get(key) ? "true" : "false");
+          });
+        });
+      }
+
+      groups.forEach(function (group) {
+        group.addEventListener("click", function (e) {
+          var btn = e.target.closest("button[data-value]");
+          if (!btn) return;
+          PamSettings.set(group.dataset.setting, btn.dataset.value);
+          render();
+        });
+      });
+
+      document.getElementById("reset").addEventListener("click", function () {
+        PamSettings.reset();
+        render();
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
