@@ -5,6 +5,7 @@
   <title>Log in — Paul &amp; Me</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="assets/logo-blue-letters.svg">
+  <meta name="description" content="Log in to your Paul &amp; Me dashboard to manage bookings, prices and guests.">
   <link rel="stylesheet" href="assets/styles.css">
   <style>
     .login-wrap {
@@ -38,8 +39,13 @@
       display: flex; justify-content: space-between; align-items: center;
       margin: 4px 0 22px;
     }
-    .form-row a { font-size: 13px; text-decoration: none; }
-    .form-row a:hover { text-decoration: underline; }
+    .form-row .link-btn {
+      background: none; border: 0; padding: 0;
+      font: inherit; font-size: 13px;
+      color: var(--pam-pink);
+      cursor: pointer;
+    }
+    .form-row .link-btn:hover { text-decoration: underline; }
 
     .or-divider {
       display: flex; align-items: center; gap: 14px;
@@ -122,7 +128,9 @@
 </head>
 <body>
 
-  <main class="login-wrap">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main class="login-wrap" id="main">
 
     <div class="login-form-side">
       <header class="login-head">
@@ -148,7 +156,7 @@
           </div>
           <div class="form-row">
             <label class="checkbox"><input type="checkbox" checked> <span>Stay signed in</span></label>
-            <a href="#" onclick="event.preventDefault(); alert('Reset email demo only.');">Forgot password?</a>
+            <button type="button" class="link-btn" onclick="alert('Reset email demo only.');">Forgot password?</button>
           </div>
 
           <button type="submit" class="slab block lg">

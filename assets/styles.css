@@ -45,6 +45,8 @@ html[data-theme="dark"] h1,
 html[data-theme="dark"] h2,
 html[data-theme="dark"] h3,
 html[data-theme="dark"] h4 { color: #fff; }
+/* tokens.css pins p to --fg-1 (navy) — invisible on navy surfaces */
+html[data-theme="dark"] p { color: var(--site-fg); }
 html[data-theme="dark"] .ink { color: #fff; }
 
 /* Hide hand illustrations when tweak off */
@@ -164,6 +166,19 @@ html[data-theme="dark"] .slab.white:hover .face { background: var(--pam-pink); c
 .on-navy .slab .back { background: #fff; color: #fff; }
 .on-navy .slab:hover .face { background: #fff; color: var(--pam-navy); box-shadow: none; }
 .on-navy .slab:hover .back { background: var(--pam-pink); color: var(--pam-pink); }
+
+/* inverse variant: white face for pink surfaces (featured plan cards) */
+.slab.inverse .face { background: #fff; color: var(--pam-pink-600); }
+.slab.inverse:hover .face { background: var(--pam-navy); color: #fff; box-shadow: none; }
+
+/* Dark theme: the navy offset back is invisible on navy — use white,
+   like the on-navy contexts already do. Outline (white) slabs keep
+   their clean outline-only look, inverse slabs keep the navy back. */
+html[data-theme="dark"] .slab .back { background: #fff; color: #fff; }
+html[data-theme="dark"] .slab.white .back { background: transparent; color: transparent; }
+html[data-theme="dark"] .slab.inverse .back { background: var(--pam-navy); color: var(--pam-navy); }
+html[data-theme="dark"] .slab:active .face { background: #fff; color: var(--pam-navy); }
+html[data-theme="dark"] .slab:focus-visible::after { border-color: #fff; }
 
 /* =========================================================
    NAV  — sticky top, mobile drawer
@@ -535,6 +550,17 @@ html[data-theme="dark"] .benefit .icon-tile.navy { background: var(--pam-pink); 
 }
 .skip-link:focus { left: 16px; top: 16px; }
 
+/* Visually hidden, but exposed to assistive technology */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Focus ring (accessibility) */
 :focus-visible {
   outline: 3px solid var(--pam-pink);
@@ -559,6 +585,8 @@ html[data-theme="light"][data-contrast="on"] {
   --fg-3: #5C647E;                 /* tertiary text: ~3.9:1 -> ~5.2:1 */
 }
 html[data-theme="light"][data-contrast="on"] a,
+html[data-theme="light"][data-contrast="on"] .link-btn,
+html[data-theme="light"][data-contrast="on"] .contact-card button.val,
 html[data-theme="light"][data-contrast="on"] .eyebrow,
 html[data-theme="light"][data-contrast="on"] .feat-eyebrow,
 html[data-theme="light"][data-contrast="on"] .info-block h3,
@@ -579,6 +607,71 @@ html[data-theme="light"][data-contrast="on"] .login-head a:hover,
 html[data-theme="light"][data-contrast="on"] .legal-toc a:hover {
   color: #B31A5C;                  /* deeper pink for hover/active emphasis */
 }
+
+/* Small white text on brand pink (#F5507D) is only 3.3:1 — in
+   accessible-contrast mode darken those pink surfaces to the
+   accessible pink (#D01D68, ≥5:1 with white). Theme-independent:
+   the pink surface is the background either way. */
+html[data-contrast="on"] .site-banner-bar,
+html[data-contrast="on"] .site-banner-sticker,
+html[data-contrast="on"] .plan-card.featured,
+html[data-contrast="on"] .plan.featured,
+html[data-contrast="on"] .variant-A .a-card,
+html[data-contrast="on"] .variant-B .b-frame,
+html[data-contrast="on"] .variant-C .c-cta {
+  background: #D01D68;
+}
+html[data-contrast="on"] .variant-B .b-stat { background: rgba(0, 0, 0, .18); }
+html[data-contrast="on"] .variant-B .b-stat .lbl,
+html[data-contrast="on"] .variant-B .b-quote small { opacity: 1; }
+html[data-contrast="on"] .plan-card.featured .plan-price small,
+html[data-contrast="on"] .plan.featured .price-unit,
+html[data-contrast="on"] .plan.featured .price-meta,
+html[data-contrast="on"] .plan.featured .tagline { color: #fff; opacity: 1; }
+html[data-contrast="on"] .variant-C .c-row .l { color: #5C647E; }
+
+/* Primary controls: white label on brand pink is 3.3:1 — swap the
+   pink they build on for the accessible pink. Hover/active states
+   derive from the same variable, so they stay consistent. */
+html[data-contrast="on"] .slab,
+html[data-contrast="on"] .btn.primary,
+html[data-contrast="on"] .seg button[aria-pressed="true"],
+html[data-contrast="on"] .billing-toggle button[aria-pressed="true"] {
+  --pam-pink: #D01D68;
+  --pam-pink-500: #B31A5C;
+}
+
+/* Brand-pink display words in headlines need 3:1 (large text) —
+   brand pink on cream is 2.9. One step darker clears it. */
+html[data-theme="light"][data-contrast="on"] .hero h1 .pink { color: var(--pam-pink-500); }
+
+/* The skip link sits on navy — keep its text white in contrast mode
+   (the global link override would turn it dark pink on navy). */
+html[data-theme="light"][data-contrast="on"] .skip-link { color: #fff; }
+
+/* Dimmed links / link-bearing text: parent opacity drags even the
+   accessible pink below 4.5 — lift it in contrast mode. */
+html[data-contrast="on"] .muted:has(a),
+html[data-contrast="on"] details.faq-item p,
+html[data-contrast="on"] .legal-toc a,
+html[data-contrast="on"] .login-head a,
+html[data-contrast="on"] .signup-head a,
+html[data-contrast="on"] .signup-prompt { opacity: 1; }
+
+/* Page-local pink surfaces & dimmed small text (login visual panel,
+   features widget mock, signup plan picker, pricing plans) */
+html[data-contrast="on"] .login-visual { background: #D01D68; }
+html[data-contrast="on"] .visual-stat { background: rgba(0, 0, 0, .18); }
+html[data-contrast="on"] .visual-stat .lbl { opacity: 1; }
+html[data-contrast="on"] .mini-widget .cta { background: #D01D68; }
+html[data-contrast="on"] .mini-widget .l { color: #5C647E; }
+html[data-contrast="on"] .plan-pick .pp-price { color: #B31A5C; }
+html[data-theme="dark"][data-contrast="on"] .plan-pick .pp-price { color: var(--pam-pink-200); }
+html[data-contrast="on"] .plan-pick .pp-price small,
+html[data-contrast="on"] .plan-pick .pp-feats { opacity: 1; }
+html[data-contrast="on"] .plan.featured .badge { color: #D01D68; }
+html[data-contrast="on"] .plan ul.feats li.dim { opacity: .65; }
+html[data-theme="dark"][data-contrast="on"] .or-divider { color: #9AA4C0; }
 
 /* Links on navy surfaces (footer, CTA bands) must stay light —
    the dark pink only applies on light backgrounds. */

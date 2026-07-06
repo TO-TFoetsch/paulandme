@@ -5,6 +5,7 @@
   <title>Contact — Paul &amp; Me</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="assets/logo-blue-letters.svg">
+  <meta name="description" content="Talk to the Paul &amp; Me team — phone, email or contact form. We're happy to help.">
   <link rel="stylesheet" href="assets/styles.css">
   <style>
     .page-hero { padding: 40px 0 24px; position: relative; }
@@ -53,6 +54,7 @@
       text-decoration: none;
     }
     .contact-card .val:hover { text-decoration: underline; }
+    .contact-card button.val { background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
     .contact-card p { font-size: 13px; opacity: .75; }
 
     /* Two-column form area */
@@ -195,7 +197,7 @@
           <div class="contact-card">
             <div class="ico"><span data-lucide="message-circle"></span></div>
             <h2>Live chat</h2>
-            <a class="val" href="#" onclick="event.preventDefault(); alert('Demo only.');">Start a chat</a>
+            <button type="button" class="val" onclick="alert('Demo only.');">Start a chat</button>
             <p>Office hours only.</p>
           </div>
         </div>

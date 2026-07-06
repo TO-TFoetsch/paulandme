@@ -5,6 +5,7 @@
   <title>Help &amp; FAQ — Paul &amp; Me</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="assets/logo-blue-letters.svg">
+  <meta name="description" content="Short answers to common questions about Paul &amp; Me — setup, bookings, payments and more.">
   <link rel="stylesheet" href="assets/styles.css">
   <style>
     .page-hero { padding: 40px 0 24px; position: relative; }
@@ -181,9 +182,11 @@
         <h1>How can Paul help?</h1>
         <p class="lead">Short answers to common questions. If something's missing, the team's a click away.</p>
         <div class="help-search">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.6" y2="16.6"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.6" y2="16.6"/></svg>
+          <label class="sr-only" for="help-q">Search the help center</label>
           <input type="search" placeholder="Search the help center…" id="help-q">
         </div>
+        <p class="sr-only" role="status" id="help-count"></p>
       </div>
       <div class="hand-deco" aria-hidden="true">
         <img src="assets/hand-pointer.png" alt="">
@@ -330,13 +333,18 @@
     // Naive client-side filter
     const q = document.getElementById('help-q');
     const items = document.querySelectorAll('details.faq-item');
+    const count = document.getElementById('help-count');
     q.addEventListener('input', () => {
       const v = q.value.trim().toLowerCase();
+      let shown = 0;
       items.forEach(i => {
-        const t = i.textContent.toLowerCase();
-        i.style.display = !v || t.includes(v) ? '' : 'none';
-        if (v && t.includes(v)) i.setAttribute('open', '');
+        const hit = !v || i.textContent.toLowerCase().includes(v);
+        i.style.display = hit ? '' : 'none';
+        if (v && hit) i.setAttribute('open', '');
+        if (hit) shown++;
       });
+      // announce the result count to screen readers
+      count.textContent = v ? shown + ' of ' + items.length + ' answers match' : '';
     });
   </script>
 </body>

@@ -5,6 +5,7 @@
   <title>Pricing — Paul &amp; Me</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="assets/logo-blue-letters.svg">
+  <meta name="description" content="Two simple plans, no commission, no lock-in. Foundation 69,90 € or Expert 119,90 € per month — cancel anytime.">
   <link rel="stylesheet" href="assets/styles.css">
   <style>
     .page-hero { padding: 40px 0 8px; position: relative; }
@@ -110,6 +111,7 @@
       line-height: 1;
       color: var(--pam-navy);
     }
+    html[data-theme="dark"] .price-num { color: #fff; }
     .price-unit { font-size: 14px; opacity: .75; margin-left: 6px; }
     .price-meta {
       font-size: 13px;
@@ -336,9 +338,9 @@
               <li><span data-lucide="check"></span> Telephone support</li>
             </ul>
             <div class="plan-cta">
-              <a class="slab block md" href="signup.html?plan=expert" style="--pam-pink: #fff;">
-                <span class="back" style="background: var(--pam-navy); color: var(--pam-navy);">Choose Expert</span>
-                <span class="face" style="background: #fff; color: rgb(0, 30, 80)">Choose Expert</span>
+              <a class="slab inverse block md" href="signup.html?plan=expert">
+                <span class="back">Choose Expert</span>
+                <span class="face">Choose Expert</span>
               </a>
             </div>
           </article>
@@ -360,11 +362,12 @@
 
         <div class="compare-card">
           <table class="compare">
+            <caption class="sr-only">Feature comparison of the Foundation and Expert plans</caption>
             <thead>
               <tr>
-                <th>Feature</th>
-                <th class="center">Foundation</th>
-                <th class="center">Expert</th>
+                <th scope="col">Feature</th>
+                <th class="center" scope="col">Foundation</th>
+                <th class="center" scope="col">Expert</th>
               </tr>
             </thead>
             <tbody>

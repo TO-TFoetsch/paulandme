@@ -418,6 +418,12 @@
   }
 
   function init() {
+    // slab .back spans duplicate the label purely for sizing the
+    // offset shadow — hide them from assistive technology so screen
+    // readers don't announce every button twice
+    document.querySelectorAll(".slab .back").forEach(function (b) {
+      b.setAttribute("aria-hidden", "true");
+    });
     initNav();
     initReveal();
   }
