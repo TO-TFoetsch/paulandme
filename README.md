@@ -22,24 +22,38 @@ python3 -m http.server 8000
 | `help.html` | Help center — categories, grouped FAQ, search filter |
 | `contact.html` | Contact — channels, form, office map |
 | `legal.html` | Impressum (DE), privacy, terms, cookies with side TOC |
-| `cms.html` | **Mini CMS** — site presentation settings (not linked from the public nav) |
+| `cms.html` | **Mini CMS** — site configuration (not linked from the public nav) |
 
 ## Mini CMS (`cms.html`)
 
-Site-wide presentation settings, persisted in `localStorage` and applied on
-every page by `assets/site.js`:
+Site-wide configuration, edited in the browser and published as
+`assets/site-config.json`, which `assets/site.js` fetches and applies on
+every page:
 
-- **Theme** — Cream (default) / Navy
-- **Hand illustrations** — show / hide
-- **Text contrast** — Accessible (WCAG AA, default) / Original brand pink
-- **Animations** — scroll reveals + hover lifts on/off (`prefers-reduced-motion` always wins)
-- **Hero variant** — homepage hero A / B / C
+- **Presentation** — theme (Cream/Navy), hand illustrations, text contrast,
+  animations, homepage hero variant A / B / C
+- **Banner & Störer** — a site-wide announcement as a top bar or a floating
+  round Störer: text, CTA, dismissible (dismissals stored per campaign ID)
+- **Tracking** — Google Tag Manager, GA4, Meta Pixel, LinkedIn Insight Tag,
+  plus a raw custom `<head>` HTML slot for anything else
+- **Integrations** — HubSpot tracking/chat loader (portal ID + EU/US data center)
+
+**Editing flow:** changes are stored as a *draft* in `localStorage` and only
+previewed in that browser (all pages show a "Draft preview" badge while a
+draft exists). To publish, export the JSON from the CMS (copy or download)
+and commit it as `assets/site-config.json`. Once the published file matches
+the draft, the CMS clears the draft automatically.
+
+> **GDPR note:** tracking pixels are injected without a consent banner so
+> far — gate them behind a cookie-consent solution before enabling real IDs
+> in production.
 
 ## Assets
 
 - `assets/tokens.css` — design tokens (colors, type, spacing, radii, motion)
-- `assets/styles.css` — shared components (nav, drawer, slab buttons, cards, footer, contrast + motion modes)
-- `assets/site.js` — settings application, mobile drawer (keyboard-accessible), scroll reveal
+- `assets/styles.css` — shared components (nav, drawer, slab buttons, cards, footer, banner/Störer, contrast + motion modes)
+- `assets/site-config.json` — published site configuration (see Mini CMS above)
+- `assets/site.js` — config loading (presentation, banner, tracking, integrations), mobile drawer (keyboard-accessible), scroll reveal
 - `assets/icons.js` — self-contained inline icon set (subset of Lucide v1.23.0, ISC); replaces `<span data-lucide="…">` placeholders. No CDN dependency.
 
 ## Fonts

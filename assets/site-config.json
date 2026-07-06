@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "presentation": {
+    "theme": "light",
+    "hands": "on",
+    "contrast": "on",
+    "motion": "on",
+    "hero": "A"
+  },
+  "banner": {
+    "enabled": false,
+    "style": "bar",
+    "text": "",
+    "ctaLabel": "",
+    "ctaHref": "",
+    "dismissible": true,
+    "id": "campaign-1"
+  },
+  "tracking": {
+    "gtmId": "",
+    "ga4Id": "",
+    "metaPixelId": "",
+    "linkedinPartnerId": "",
+    "customHeadHtml": ""
+  },
+  "integrations": {
+    "hubspot": {
+      "enabled": false,
+      "portalId": "",
+      "region": "eu1"
+    }
+  }
+}

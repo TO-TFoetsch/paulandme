@@ -632,3 +632,129 @@ html[data-theme="light"][data-contrast="on"] .on-navy a:hover {
     scroll-behavior: auto !important;
   }
 }
+
+/* =========================================================
+   SITE BANNER / STÖRER  (CMS: banner)
+   Rendered by site.js from assets/site-config.json.
+   ========================================================= */
+.site-banner-bar {
+  position: relative;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 16px;
+  background: var(--pam-pink);
+  color: #fff;
+  padding: 10px 48px;
+  text-align: center;
+  font-size: 14px;
+}
+.site-banner-bar .banner-text { font-weight: 500; }
+.site-banner-bar .banner-cta {
+  color: #fff;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+.site-banner-bar .banner-cta:hover { color: var(--pam-navy); }
+.site-banner-bar .banner-close {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.site-banner-bar .banner-close:hover { background: rgba(255,255,255,.18); }
+.site-banner-bar .banner-close svg { width: 15px; height: 15px; }
+
+/* Störer — floating round badge, brand-style rotated */
+.site-banner-sticker {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 90;
+  width: 170px;
+  height: 170px;
+  border-radius: 999px;
+  background: var(--pam-pink);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 22px;
+  transform: rotate(-6deg);
+  box-shadow: var(--shadow-pink);
+  overflow: hidden;
+}
+.site-banner-sticker .banner-text {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 15px;
+  line-height: 1.12;
+}
+.site-banner-sticker .banner-cta {
+  color: #fff;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.site-banner-sticker .banner-cta:hover { color: var(--pam-navy); }
+.site-banner-sticker .banner-close {
+  position: absolute;
+  top: 10px;
+  right: 26px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pam-navy);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+.site-banner-sticker .banner-close svg { width: 13px; height: 13px; }
+@media (max-width: 600px) {
+  .site-banner-sticker { width: 138px; height: 138px; left: 10px; bottom: 10px; padding: 16px; }
+  .site-banner-sticker .banner-text { font-size: 13px; }
+}
+
+/* Badge shown while an unpublished CMS draft is active in this browser */
+.draft-badge {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 95;
+  background: var(--pam-navy);
+  color: #fff;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: .06em;
+  padding: 9px 14px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+.draft-badge:hover { background: var(--pam-pink); color: #fff; }
