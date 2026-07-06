@@ -1,25 +1,59 @@
-# CODING AGENTS: READ THIS FIRST
+# Paul & Me — Website
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Production implementation of the Paul & Me marketing site, built from the
+Claude Design handoff (see `../chats/` for the design decisions).
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+Static HTML/CSS/JS — no build step. Serve the directory with any static file
+server, e.g.:
 
-## What you should do — IMPORTANT
+```
+python3 -m http.server 8000
+```
 
-**Read the chat transcripts first.** There are 2 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+## Pages
 
-**Read `project/features.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+| Page | Purpose |
+| --- | --- |
+| `index.html` | Home — hero (3 variants, selectable in the mini CMS) |
+| `features.html` | Features — booking widget, channel management, guest inbox, payments & invoicing + "everything else" grid |
+| `pricing.html` | Pricing — monthly/annual toggle, comparison table, mini FAQ |
+| `signup.html` | 4-step signup flow (plan → account → property → goal → success) |
+| `login.html` | Login, split layout |
+| `help.html` | Help center — categories, grouped FAQ, search filter |
+| `contact.html` | Contact — channels, form, office map |
+| `legal.html` | Impressum (DE), privacy, terms, cookies with side TOC |
+| `cms.html` | **Mini CMS** — site presentation settings (not linked from the public nav) |
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+## Mini CMS (`cms.html`)
 
-## About the design files
+Site-wide presentation settings, persisted in `localStorage` and applied on
+every page by `assets/site.js`:
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+- **Theme** — Cream (default) / Navy
+- **Hand illustrations** — show / hide
+- **Text contrast** — Accessible (WCAG AA, default) / Original brand pink
+- **Animations** — scroll reveals + hover lifts on/off (`prefers-reduced-motion` always wins)
+- **Hero variant** — homepage hero A / B / C
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+## Assets
 
-## Bundle contents
+- `assets/tokens.css` — design tokens (colors, type, spacing, radii, motion)
+- `assets/styles.css` — shared components (nav, drawer, slab buttons, cards, footer, contrast + motion modes)
+- `assets/site.js` — settings application, mobile drawer (keyboard-accessible), scroll reveal
+- `assets/icons.js` — self-contained inline icon set (subset of Lucide v1.23.0, ISC); replaces `<span data-lucide="…">` placeholders. No CDN dependency.
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Paul & Me Webseite` project files (HTML prototypes, assets, components)
+## Fonts
+
+The brand calls for **Alphabet Soup** (display) and **Futura PT Book** (body).
+`assets/tokens.css` currently loads the closest Google Fonts substitutes
+(**Lilita One** and **Jost**) via `@import`. Swap in the licensed font files
+there for final production use.
+
+## Accessibility
+
+Carried over from the design review: WCAG 2.1 AA contrast tokens, keyboard-
+accessible mobile drawer (`inert`, `aria-expanded`, Esc-to-close), focus rings
+that wrap the slab buttons incl. their offset shadow (white on navy surfaces),
+`prefers-reduced-motion` support, correct heading hierarchy, skip links,
+`role="status"` messages, `lang="de"` on German legal sections, and ≥40px
+footer tap targets on mobile.
