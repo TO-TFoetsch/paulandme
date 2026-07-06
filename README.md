@@ -38,11 +38,15 @@ every page:
 - **Tracking** — Google Tag Manager, GA4, Meta Pixel, LinkedIn Insight Tag,
   plus a raw custom `<head>` HTML slot for anything else
 - **Integrations** — HubSpot tracking/chat loader (portal ID + EU/US data center)
+- **Launch checklist** — pre-launch todos with add/remove and per-item ticks,
+  shared via the published config
 
 **Editing flow:** changes are stored as a *draft* in `localStorage` and only
 previewed in that browser (all pages show a "Draft preview" badge while a
-draft exists). To publish, export the JSON from the CMS (copy or download)
-and commit it as `assets/site-config.json`. Once the published file matches
+draft exists). To publish, either use **Publish to GitHub** (commits
+`assets/site-config.json` to `main` via the GitHub API; needs a fine-grained
+PAT with *Contents: Read and write* on this repo, stored only in the browser)
+or export the JSON and commit it manually. Once the published file matches
 the draft, the CMS clears the draft automatically.
 
 > **GDPR note:** tracking pixels are injected without a consent banner so

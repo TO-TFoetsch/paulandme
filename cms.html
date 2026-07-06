@@ -158,6 +158,67 @@
     .btn.primary:hover { background: var(--pam-pink-500); border-color: var(--pam-pink-500); color: #fff; }
     .btn.small { padding: 7px 12px; font-size: 11px; }
 
+    #publish-msg { font-size: 13px; margin-top: 12px; font-weight: 500; min-height: 1em; }
+    #publish-msg[data-kind="ok"] { color: var(--pam-success); }
+    #publish-msg[data-kind="err"] { color: var(--pam-error); }
+
+    .linkish {
+      background: transparent; border: 0; padding: 0;
+      font-size: 13px; font-weight: 500;
+      color: var(--pam-pink);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .gh-area { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--site-line); }
+    #gh-token-area { margin-top: 12px; }
+    #gh-token-area .hint { display: block; margin-bottom: 4px; }
+
+    /* Launch checklist */
+    .todo-progress {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--pam-pink);
+      margin-left: 10px;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .todo-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--site-line);
+    }
+    .todo-row:last-child { border-bottom: 0; }
+    .todo-row .checkbox { flex: 1; }
+    .todo-row.done .checkbox span { text-decoration: line-through; opacity: .5; }
+    .todo-remove {
+      background: transparent;
+      border: 0;
+      color: var(--site-fg);
+      opacity: .4;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .todo-remove:hover { opacity: 1; color: var(--pam-error); }
+    .todo-add { display: flex; gap: 10px; margin-top: 16px; }
+    .todo-add input { flex: 1; }
+    .todo-add input {
+      padding: 10px 14px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      border: 1.5px solid var(--field-border);
+      border-radius: var(--radius-md);
+      background: var(--site-input-bg);
+      color: var(--site-fg);
+    }
+
     .publish-hint { font-size: 13px; opacity: .65; margin-top: 14px; }
     .publish-hint code {
       font-size: 12px;
@@ -201,11 +262,40 @@
     <div class="cms-card">
       <p id="publish-status" role="status">Loading published config…</p>
       <div class="cms-actions">
-        <button type="button" class="btn primary" id="copy-json">Copy JSON</button>
+        <button type="button" class="btn primary" id="publish-github">Publish to GitHub</button>
+        <button type="button" class="btn" id="copy-json">Copy JSON</button>
         <button type="button" class="btn" id="download-json">Download JSON</button>
         <button type="button" class="btn" id="discard">Discard draft</button>
       </div>
-      <p class="publish-hint">To publish: commit the JSON as <code>assets/site-config.json</code> and push — or simply paste it to Claude. Once the published file matches your draft, the draft clears itself.</p>
+      <p id="publish-msg" role="status"></p>
+      <p class="publish-hint"><strong>Publish to GitHub</strong> commits <code>assets/site-config.json</code> to <code>main</code>; the live site updates in about a minute. Alternatively copy the JSON and paste it to Claude.</p>
+
+      <div class="gh-area">
+        <button type="button" class="linkish" id="toggle-token">GitHub connection…</button>
+        <div id="gh-token-area" style="display:none">
+          <p class="hint">Publishing needs a <strong>fine-grained personal access token</strong>: GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token. Repository access: <em>only</em> <code>TO-TFoetsch/paulandme</code> · Permissions → Contents: <em>Read and write</em> · set an expiration. The token is stored only in this browser — treat it like a password.</p>
+          <div class="field">
+            <label for="gh-token">Token</label>
+            <input id="gh-token" type="password" autocomplete="off" placeholder="github_pat_…">
+          </div>
+          <div class="cms-actions" style="margin-top:10px">
+            <button type="button" class="btn" id="save-token">Save token</button>
+            <button type="button" class="btn" id="forget-token">Forget token</button>
+          </div>
+          <p class="hint" id="gh-token-state"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ LAUNCH CHECKLIST ============ -->
+    <div class="cms-card">
+      <h2 class="card-title">Launch checklist <span class="todo-progress" id="todo-progress"></span></h2>
+      <p class="card-sub">Everything left before going live. Ticks are part of the config draft — publish to share them with the team.</p>
+      <div id="todo-list"></div>
+      <div class="todo-add">
+        <input id="new-todo" placeholder="Add a task…" aria-label="New task">
+        <button type="button" class="btn" id="add-todo">Add</button>
+      </div>
     </div>
 
     <!-- ============ PRESENTATION ============ -->
@@ -585,6 +675,76 @@
         return node;
       }
 
+      /* ---------- launch checklist ---------- */
+      var todoListEl = document.getElementById("todo-list");
+
+      function renderTodoList() {
+        todoListEl.innerHTML = "";
+        var todos = model.launchTodos;
+        var done = todos.filter(function (t) { return t.done; }).length;
+        document.getElementById("todo-progress").textContent =
+          todos.length ? done + " / " + todos.length + " done" : "";
+
+        if (!todos.length) {
+          var note = document.createElement("p");
+          note.className = "empty-note";
+          note.textContent = "Nothing left — ready for launch 🎉";
+          todoListEl.appendChild(note);
+          return;
+        }
+        todos.forEach(function (t, i) {
+          var row = document.createElement("div");
+          row.className = "todo-row" + (t.done ? " done" : "");
+
+          var label = document.createElement("label");
+          label.className = "checkbox";
+          var cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = !!t.done;
+          cb.addEventListener("change", function () {
+            t.done = cb.checked;
+            saveDraft();
+            renderTodoList();
+          });
+          var span = document.createElement("span");
+          span.textContent = t.text;
+          label.appendChild(cb);
+          label.appendChild(span);
+          row.appendChild(label);
+
+          var rm = document.createElement("button");
+          rm.type = "button";
+          rm.className = "todo-remove";
+          rm.setAttribute("aria-label", "Remove task");
+          rm.innerHTML = "&times;";
+          rm.addEventListener("click", function () {
+            model.launchTodos.splice(i, 1);
+            saveDraft();
+            renderTodoList();
+          });
+          row.appendChild(rm);
+
+          todoListEl.appendChild(row);
+        });
+      }
+
+      function addTodo() {
+        var inp = document.getElementById("new-todo");
+        var text = inp.value.trim();
+        if (!text) return;
+        model.launchTodos.push(C.merge(C.todoDefaults, {
+          id: "todo-" + Date.now().toString(36),
+          text: text
+        }));
+        inp.value = "";
+        saveDraft();
+        renderTodoList();
+      }
+      document.getElementById("add-todo").addEventListener("click", addTodo);
+      document.getElementById("new-todo").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") addTodo();
+      });
+
       /* ---------- publish status & actions ---------- */
       function renderStatus() {
         var el = document.getElementById("publish-status");
@@ -626,6 +786,135 @@
         model = C.normalize(published || {});
         render();
         renderBannerList();
+        renderTodoList();
+      });
+
+      /* ---------- publish to GitHub ---------- */
+      var GH = { owner: "TO-TFoetsch", repo: "paulandme", branch: "main", path: "assets/site-config.json" };
+      var LS_TOKEN = "pam-gh-token";
+      var IS_LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+
+      function ghToken() {
+        try { return localStorage.getItem(LS_TOKEN) || ""; } catch (e) { return ""; }
+      }
+      function ghApiUrl() {
+        return "https://api.github.com/repos/" + GH.owner + "/" + GH.repo + "/contents/" + GH.path;
+      }
+      function ghHeaders() {
+        return {
+          "Authorization": "Bearer " + ghToken(),
+          "Accept": "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28"
+        };
+      }
+      /* base64 for UTF-8 content (umlauts etc.) */
+      function b64utf8(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+      }
+      function setMsg(text, kind) {
+        var el = document.getElementById("publish-msg");
+        el.textContent = text;
+        if (kind) el.dataset.kind = kind; else delete el.dataset.kind;
+      }
+
+      var tokenArea = document.getElementById("gh-token-area");
+      function renderTokenState() {
+        document.getElementById("gh-token-state").textContent = ghToken()
+          ? "A token is saved in this browser."
+          : "No token saved yet.";
+      }
+      document.getElementById("toggle-token").addEventListener("click", function () {
+        tokenArea.style.display = tokenArea.style.display === "none" ? "" : "none";
+      });
+      document.getElementById("save-token").addEventListener("click", function () {
+        var v = document.getElementById("gh-token").value.trim();
+        if (!v) return;
+        try { localStorage.setItem(LS_TOKEN, v); } catch (e) {}
+        document.getElementById("gh-token").value = "";
+        renderTokenState();
+        setMsg("Token saved in this browser.", "ok");
+      });
+      document.getElementById("forget-token").addEventListener("click", function () {
+        try { localStorage.removeItem(LS_TOKEN); } catch (e) {}
+        renderTokenState();
+        setMsg("Token removed.");
+      });
+      renderTokenState();
+
+      function pollPublished(btn) {
+        var tries = 0;
+        var timer = setInterval(function () {
+          tries++;
+          fetch(C.url + "?cb=" + Date.now(), { cache: "no-store" })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .catch(function () { return null; })
+            .then(function (pub) {
+              if (pub && same(C.normalize(pub), C.normalize(model))) {
+                clearInterval(timer);
+                published = C.normalize(pub);
+                C.setDraft(null);
+                hasDraft = false;
+                render();
+                renderBannerList();
+                renderTodoList();
+                setMsg("Live! The published site now matches your changes.", "ok");
+                btn.disabled = false;
+              } else if (tries >= 24) {   // ~2 minutes
+                clearInterval(timer);
+                setMsg("Committed — but the live site hasn't refreshed here yet. It usually takes under a minute; reload this page later.");
+                btn.disabled = false;
+              }
+            });
+        }, 5000);
+      }
+
+      document.getElementById("publish-github").addEventListener("click", function () {
+        var btn = this;
+        if (!ghToken()) {
+          tokenArea.style.display = "";
+          setMsg("Publishing needs a GitHub token — set one up below.", "err");
+          return;
+        }
+        btn.disabled = true;
+        setMsg("Publishing…");
+        // read the current file first: the update API needs its sha
+        fetch(ghApiUrl() + "?ref=" + GH.branch, { headers: ghHeaders(), cache: "no-store" })
+          .then(function (r) {
+            if (r.status === 401 || r.status === 403) throw new Error("Token is invalid, expired, or lacks access to the repo.");
+            if (!r.ok) throw new Error("Could not read the current config from GitHub (HTTP " + r.status + ").");
+            return r.json();
+          })
+          .then(function (cur) {
+            return fetch(ghApiUrl(), {
+              method: "PUT",
+              headers: ghHeaders(),
+              body: JSON.stringify({
+                message: "Publish site config from CMS",
+                content: b64utf8(exportJSON()),
+                sha: cur.sha,
+                branch: GH.branch
+              })
+            });
+          })
+          .then(function (r) {
+            if (r.status === 409) throw new Error("Conflict — the file changed on GitHub in the meantime. Reload this page and publish again.");
+            if (!r.ok) throw new Error("Commit failed (HTTP " + r.status + ").");
+            return r.json();
+          })
+          .then(function (res) {
+            var sha = (res.commit && res.commit.sha || "").slice(0, 7);
+            if (IS_LOCAL) {
+              setMsg("Committed to GitHub (" + sha + "). The live site updates in ~1 min. You're on a local copy — run git pull to sync it.", "ok");
+              btn.disabled = false;
+            } else {
+              setMsg("Committed (" + sha + "). Waiting for the live site to update…");
+              pollPublished(btn);
+            }
+          })
+          .catch(function (err) {
+            setMsg(err.message, "err");
+            btn.disabled = false;
+          });
       });
 
       /* ---------- load published config for status/diff ---------- */
@@ -637,6 +926,7 @@
           if (!hasDraft) {
             model = C.normalize(published);
             renderBannerList();
+            renderTodoList();
           } else if (same(model, published)) {
             // draft got published in the meantime — clear it
             C.setDraft(null);
@@ -647,6 +937,7 @@
 
       render();
       renderBannerList();
+      renderTodoList();
     })();
   </script>
 </body>

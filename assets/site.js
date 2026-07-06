@@ -25,6 +25,7 @@
       hero: "A"           // homepage hero variant A | B | C
     },
     banners: [],          // list of banner objects — see BANNER_DEFAULTS
+    launchTodos: [],      // pre-launch checklist — see TODO_DEFAULTS; CMS-only
     tracking: {
       gtmId: "",              // GTM-XXXXXXX
       ga4Id: "",              // G-XXXXXXXXXX
@@ -39,6 +40,13 @@
         region: "eu1"         // "eu1" | "na1"
       }
     }
+  };
+
+  /* One entry in config.launchTodos (rendered only in the CMS) */
+  var TODO_DEFAULTS = {
+    id: "",
+    text: "",
+    done: false
   };
 
   /* One entry in config.banners */
@@ -76,10 +84,11 @@
     return out;
   }
 
-  /* Merge onto the schema and sanitize each banner item. */
+  /* Merge onto the schema and sanitize each list item. */
   function normalizeConfig(raw) {
     var c = mergeConfig(CONFIG_DEFAULTS, raw);
     c.banners = c.banners.map(function (b) { return mergeConfig(BANNER_DEFAULTS, b); });
+    c.launchTodos = c.launchTodos.map(function (t) { return mergeConfig(TODO_DEFAULTS, t); });
     return c;
   }
 
@@ -268,6 +277,7 @@
   window.PamConfig = {
     defaults: CONFIG_DEFAULTS,
     bannerDefaults: BANNER_DEFAULTS,
+    todoDefaults: TODO_DEFAULTS,
     url: CONFIG_URL,
     merge: mergeConfig,
     normalize: normalizeConfig,
