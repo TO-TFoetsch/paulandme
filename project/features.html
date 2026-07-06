@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-hands="on">
+<head>
+  <meta charset="utf-8">
+  <title>Features — Paul &amp; Me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    .page-hero {
+      padding: 40px 0 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 768px) { .page-hero { padding: 64px 0 32px; } }
+    .page-hero .eyebrow { display: inline-block; margin-bottom: 14px; }
+    .page-hero h1 { font-size: clamp(36px, 6.5vw, 64px); max-width: 14ch; }
+    .page-hero p.lead { margin-top: 18px; max-width: 580px; }
+
+    .page-hero .hand-deco {
+      position: absolute;
+      width: 180px;
+      top: 10px; right: -40px;
+      transform: rotate(18deg);
+      opacity: .9;
+    }
+    @media (min-width: 768px) { .page-hero .hand-deco { width: 240px; right: 5%; top: 20px; } }
+
+    /* Feature module: alternating image-left/image-right blocks */
+    .feature-block {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 48px 0;
+    }
+    @media (min-width: 900px) {
+      .feature-block { grid-template-columns: 1fr 1fr; gap: 64px; padding: 64px 0; }
+      .feature-block.flip > div:first-child { order: 2; }
+    }
+
+    .feature-block h2 {
+      font-size: clamp(26px, 3.4vw, 38px);
+      margin-bottom: 12px;
+    }
+    .feature-block .feat-eyebrow {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 12px;
+      color: var(--pam-pink);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .feature-block .checks {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .feature-block .checks li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 15px;
+    }
+    .feature-block .checks svg { width: 18px; height: 18px; color: var(--pam-pink); flex-shrink: 0; margin-top: 2px; }
+
+    /* Visual blocks (placeholders for screenshots) */
+    .feat-art {
+      position: relative;
+      background: var(--site-card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 24px;
+      min-height: 320px;
+      overflow: hidden;
+    }
+    @media (min-width: 768px) { .feat-art { min-height: 380px; padding: 32px; } }
+
+    .feat-art.pink { background: var(--pam-pink); color: #fff; }
+    .feat-art.pink h4 { color: #fff; }
+
+    /* Widget mock */
+    .mini-widget {
+      background: #fff;
+      color: var(--pam-navy);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-md);
+      display: flex; flex-direction: column; gap: 8px;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .mini-widget .w-logo { height: 28px; margin: 0 auto 6px; display: block; }
+    .mini-widget .w-row {
+      background: #F7F6F2;
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+    .mini-widget .l { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); }
+    .mini-widget .v { font-size: 13px; font-weight: 600; }
+    .mini-widget .cta {
+      background: var(--pam-pink); color: #fff; text-align: center;
+      font-family: var(--font-display); text-transform: uppercase;
+      font-size: 12px; letter-spacing: .08em;
+      padding: 11px; border-radius: 10px;
+    }
+
+    /* Calendar mock */
+    .mini-cal {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      color: var(--pam-navy);
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    .mini-cal .cal-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .mini-cal .cal-head .month {
+      font-family: var(--font-display); text-transform: uppercase;
+      font-size: 16px; letter-spacing: .04em;
+    }
+    .mini-cal .cal-head .nav-btn {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--pam-cream); display:flex; align-items:center; justify-content:center;
+      border: 0; cursor: pointer; color: var(--pam-navy);
+    }
+    .mini-cal .cal-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+    }
+    .mini-cal .cal-grid .d {
+      aspect-ratio: 1; display:flex; align-items:center; justify-content:center;
+      font-size: 12px; border-radius: 8px; color: var(--pam-navy);
+    }
+    .mini-cal .cal-grid .d.head { color: var(--fg-3); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+    .mini-cal .cal-grid .d.booked { background: var(--pam-pink); color: #fff; }
+    .mini-cal .cal-grid .d.range { background: var(--pam-pink-100); color: var(--pam-pink-700); }
+    .mini-cal .cal-grid .d.today { box-shadow: inset 0 0 0 2px var(--pam-navy); }
+
+    /* Inbox mock */
+    .mini-inbox { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 12px; max-width: 360px; margin: 0 auto; }
+    .mini-inbox .row {
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      align-items: center;
+      cursor: pointer;
+    }
+    .mini-inbox .row.active { background: var(--pam-pink-50); }
+    .mini-inbox .row:hover { background: var(--pam-cream); }
+    .mini-inbox .avatar { width: 36px; height: 36px; border-radius: 999px; background: var(--pam-navy); color: #fff; display:flex; align-items:center; justify-content:center; font-family: var(--font-display); font-size: 14px; }
+    .mini-inbox .name { font-size: 13px; font-weight: 600; color: var(--pam-navy); }
+    .mini-inbox .preview { font-size: 12px; color: var(--fg-2); }
+    .mini-inbox .time { font-size: 11px; color: var(--fg-3); }
+    .mini-inbox .badge { background: var(--pam-pink); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 999px; }
+
+    /* Pricing rates mock */
+    .mini-rates { background: #fff; border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-md); color: var(--pam-navy); max-width: 360px; margin: 0 auto; }
+    .mini-rates .rate {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--pam-line);
+    }
+    .mini-rates .rate:last-child { border-bottom: 0; }
+    .mini-rates .rate .label { font-size: 13px; }
+    .mini-rates .rate .price { font-family: var(--font-display); color: var(--pam-pink); font-size: 18px; }
+    .mini-rates .rate .badge { font-size: 10px; background: var(--pam-pink-100); color: var(--pam-pink-700); padding: 3px 8px; border-radius: 999px; font-family: var(--font-display); text-transform: uppercase; letter-spacing: .04em; }
+
+    /* feature grid (smaller items at bottom) */
+    .more-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 700px) { .more-grid { grid-template-columns: 1fr 1fr; gap: 20px; } }
+    @media (min-width: 1024px) { .more-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .more-card { display: flex; gap: 14px; align-items: flex-start; }
+    .more-card .ico {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--pam-pink-100); color: var(--pam-pink);
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink: 0;
+    }
+    .more-card h3 { font-size: 17px; margin-bottom: 4px; }
+    .more-card p { font-size: 14px; opacity: .82; }
+  </style>
+</head>
+<body data-screen-label="Features">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= NAV ================= -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Paul &amp; Me — Home">
+        <img class="light-only" src="assets/logo-blue-full.svg" alt="Paul &amp; Me">
+        <img class="dark-only" src="assets/logo-white-full.svg" alt="Paul &amp; Me">
+      </a>
+      <ul class="nav-links">
+        <li><a href="features.html" aria-current="page">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="help.html">Help</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log in</a></li>
+      </ul>
+      <a class="nav-cta slab sm" href="signup.html"><span class="back">Get started</span><span class="face">Get started</span></a>
+      <button class="nav-toggle" aria-label="Open menu" aria-controls="drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="13" x2="20" y2="13"/><line x1="4" y1="19" x2="20" y2="19"/></svg>
+      </button>
+    </div>
+  </nav>
+  <aside class="nav-drawer" id="drawer" data-open="false" aria-label="Mobile menu">
+    <div class="nav-drawer-top">
+      <img class="light-only" src="assets/logo-blue-full.svg" alt="Paul &amp; Me" style="height:36px">
+      <img class="dark-only" src="assets/logo-white-full.svg" alt="Paul &amp; Me" style="height:36px">
+      <button class="drawer-close nav-toggle" aria-label="Close menu">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+    <ul>
+      <li><a href="features.html" aria-current="page">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Log in</a></li>
+    </ul>
+    <a class="drawer-cta slab block lg" href="signup.html"><span class="back">Get started</span><span class="face">Get started</span></a>
+  </aside>
+
+  <main id="main">
+
+    <!-- ================= PAGE HERO ================= -->
+    <section class="page-hero" data-screen-label="Hero">
+      <div class="container">
+        <span class="eyebrow">Features</span>
+        <h1>Everything you need. Nothing you don't.</h1>
+        <p class="lead">Paul &amp; Me is the booking engine, calendar, guest inbox and pricing tool, packed into one tidy product. Built for 1–3 properties — so it stays simple.</p>
+      </div>
+      <div class="hand-deco" aria-hidden="true">
+        <img src="assets/hand-pointer.png" alt="">
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 1: BOOKING WIDGET ================= -->
+    <section data-screen-label="Booking widget" style="padding-top: 24px;">
+      <div class="container">
+        <div class="feature-block">
+          <div>
+            <span class="feat-eyebrow">Your widget · Your site</span>
+            <h2>The booking widget that lives where your guests are.</h2>
+            <p class="lead">One line of code. Drop it into your website, your Instagram bio, your email signature. Guests book in four taps — no detour through a portal.</p>
+            <ul class="checks">
+              <li><span data-lucide="check"></span> Matches your colours and logo</li>
+              <li><span data-lucide="check"></span> Works in any language</li>
+              <li><span data-lucide="check"></span> Mobile-first by default</li>
+              <li><span data-lucide="check"></span> Live availability, no double bookings</li>
+            </ul>
+          </div>
+          <div class="feat-art pink">
+            <div class="mini-widget">
+              <img class="w-logo" src="assets/logo-blue-full.svg" alt="">
+              <div class="w-row"><div class="l">Arrival</div><div class="v">02 June 2026</div></div>
+              <div class="w-row"><div class="l">Departure</div><div class="v">10 June 2026</div></div>
+              <div class="w-row"><div class="l">Guests</div><div class="v">4 Adults · 2 Children</div></div>
+              <div class="cta">Book Now</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 2: CHANNEL MANAGEMENT ================= -->
+    <section data-screen-label="Channels" style="padding: 0;">
+      <div class="container">
+        <div class="feature-block flip">
+          <div>
+            <span class="feat-eyebrow">Channel management</span>
+            <h2>Every portal connected. One source of truth.</h2>
+            <p class="lead">Connect Airbnb, Booking.com and co. once. Paul syncs availability and rates in both directions — portal bookings land right next to your direct ones, and double bookings simply can't happen.</p>
+            <ul class="checks">
+              <li><span data-lucide="check"></span> Connect the big portals in minutes</li>
+              <li><span data-lucide="check"></span> Availability &amp; rates sync both ways</li>
+              <li><span data-lucide="check"></span> Portal bookings flow straight into Paul</li>
+              <li><span data-lucide="check"></span> No double bookings — ever</li>
+            </ul>
+          </div>
+          <div class="feat-art">
+            <div class="mini-rates">
+              <div class="rate">
+                <div><div class="label">Airbnb</div><div style="font-size:11px; color: var(--fg-3);">Synced 2 min ago</div></div>
+                <span class="badge">Connected</span>
+              </div>
+              <div class="rate">
+                <div><div class="label">Booking.com</div><div style="font-size:11px; color: var(--fg-3);">Synced 5 min ago</div></div>
+                <span class="badge">Connected</span>
+              </div>
+              <div class="rate">
+                <div><div class="label">FeWo-direkt</div><div style="font-size:11px; color: var(--fg-3);">Synced 12 min ago</div></div>
+                <span class="badge">Connected</span>
+              </div>
+              <div class="rate">
+                <div><div class="label">Your website</div><div style="font-size:11px; color: var(--fg-3);">Booking widget · live</div></div>
+                <div class="price" style="font-size:14px;">Direct · 0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 3: GUEST INBOX ================= -->
+    <section data-screen-label="Inbox" style="padding: 0;">
+      <div class="container">
+        <div class="feature-block">
+          <div>
+            <span class="feat-eyebrow">Guest inbox</span>
+            <h2>Every conversation with every guest. One inbox.</h2>
+            <p class="lead">Stop hunting through email threads. Paul collects all guest messages — from the widget, your website, even the phone callback request — into one tidy stream.</p>
+            <ul class="checks">
+              <li><span data-lucide="check"></span> Threaded by booking</li>
+              <li><span data-lucide="check"></span> Templates for common replies</li>
+              <li><span data-lucide="check"></span> Read receipts</li>
+              <li><span data-lucide="check"></span> Mobile push notifications</li>
+            </ul>
+          </div>
+          <div class="feat-art">
+            <div class="mini-inbox">
+              <div class="row active">
+                <div class="avatar">AM</div>
+                <div><div class="name">Anna Müller</div><div class="preview">Hi! Is the apartment dog-friendly?</div></div>
+                <div class="time"><span class="badge">3</span></div>
+              </div>
+              <div class="row">
+                <div class="avatar" style="background: var(--pam-pink)">JK</div>
+                <div><div class="name">Jakob Kraus</div><div class="preview">Can we check in late on the 14th?</div></div>
+                <div class="time">2h</div>
+              </div>
+              <div class="row">
+                <div class="avatar">LF</div>
+                <div><div class="name">Lena Fischer</div><div class="preview">Thanks — the place was perfect ⭐</div></div>
+                <div class="time">1d</div>
+              </div>
+              <div class="row">
+                <div class="avatar" style="background: var(--pam-pink)">TS</div>
+                <div><div class="name">Tomas Schmid</div><div class="preview">Booking PM-4127 — invoice please</div></div>
+                <div class="time">3d</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 4: PAYMENTS & INVOICING ================= -->
+    <section data-screen-label="Payments" style="padding: 0;">
+      <div class="container">
+        <div class="feature-block flip">
+          <div>
+            <span class="feat-eyebrow">Payments &amp; invoicing</span>
+            <h2>Get paid on time. Invoices write themselves.</h2>
+            <p class="lead">Online payments, deposits and installment plans are built in. Every booking gets a VAT-correct invoice, and open banking matches incoming payments to the right reservation — automatically.</p>
+            <ul class="checks">
+              <li><span data-lucide="check"></span> Stripe &amp; SEPA payments built in</li>
+              <li><span data-lucide="check"></span> VAT-correct invoices on every booking</li>
+              <li><span data-lucide="check"></span> Deposits &amp; installment plans</li>
+              <li><span data-lucide="check"></span> Open banking matches payments automatically</li>
+            </ul>
+          </div>
+          <div class="feat-art">
+            <div class="mini-rates">
+              <div class="rate">
+                <div><div class="label">Invoice PM-4127</div><div style="font-size:11px; color: var(--fg-3);">Anna Müller · paid via SEPA</div></div>
+                <div class="price">640 €</div>
+              </div>
+              <div class="rate">
+                <div><div class="label">Invoice PM-4130</div><div style="font-size:11px; color: var(--fg-3);">Jakob Kraus · deposit received</div><span class="badge" style="margin-top:4px; display:inline-block;">1 of 2 installments</span></div>
+                <div class="price">420 €</div>
+              </div>
+              <div class="rate">
+                <div><div class="label">Invoice PM-4131</div><div style="font-size:11px; color: var(--fg-3);">Lena Fischer · reminder sent</div></div>
+                <div class="price" style="color: var(--pam-navy);">Open</div>
+              </div>
+              <div class="rate">
+                <div><div class="label">Bank sync</div><div style="font-size:11px; color: var(--fg-3);">2 payments matched today</div></div>
+                <span class="badge">Auto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MORE FEATURES ================= -->
+    <section data-screen-label="Everything else" style="background: var(--site-bg-2);">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Everything else</span>
+          <h2>The small things that add up</h2>
+        </div>
+        <div class="more-grid">
+          <div class="more-card">
+            <div class="ico"><span data-lucide="layout-dashboard"></span></div>
+            <div><h3>Dashboard &amp; reports</h3><p>All your numbers at a glance: earnings, arrivals and open tasks.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="calendar-days"></span></div>
+            <div><h3>Calendar &amp; reservations</h3><p>Availability, occupancy plan, arrivals and departures — one view.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="map-pin"></span></div>
+            <div><h3>Properties &amp; prices</h3><p>Locations, units, amenities and rates — managed in one place.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="users"></span></div>
+            <div><h3>Guest database</h3><p>Full guest history and profiles at every booking. (Plus)</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="file-text"></span></div>
+            <div><h3>Digital registration forms</h3><p>Paperless guest registration, done online. Coming soon.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="zap"></span></div>
+            <div><h3>Templates &amp; automations</h3><p>Reply templates and messages that send themselves. Coming soon.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="sparkles"></span></div>
+            <div><h3>Tasks &amp; housekeeping</h3><p>To-dos, cleaning boards and tickets keep the whole team in sync.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="package"></span></div>
+            <div><h3>Add-ons &amp; packages</h3><p>Sell extras and bundle arrangements to grow every booking.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="ticket"></span></div>
+            <div><h3>Voucher shop</h3><p>Sell gift vouchers, Paul handles the redemption. Coming soon.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="key-round"></span></div>
+            <div><h3>Smart locks &amp; API</h3><p>Digital door locks and programmatic access. (Plus)</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="languages"></span></div>
+            <div><h3>Multi-language</h3><p>Guests browse and book in their own language. Currently EN, DE, FR, IT.</p></div>
+          </div>
+          <div class="more-card">
+            <div class="ico"><span data-lucide="shield-check"></span></div>
+            <div><h3>GDPR-native</h3><p>German servers. German hosting. Data export with one click.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA BAND ================= -->
+    <section data-screen-label="CTA">
+      <div class="container">
+        <div class="cta-band on-navy">
+          <div>
+            <h2>Try Paul for 14 days. No card needed.</h2>
+            <p>Set up your listing, embed the widget, see your first booking come in. If it's not for you, just close the tab.</p>
+            <div style="margin-top: 24px; display: flex; gap: 14px; flex-wrap: wrap;">
+              <a class="slab lg" href="signup.html"><span class="back">Start free trial</span><span class="face">Start free trial</span></a>
+              <a class="slab white lg" href="pricing.html"><span class="back">See pricing</span><span class="face">See pricing</span></a>
+            </div>
+          </div>
+          <div class="hand-deco" style="position: relative; max-width: 240px; margin: 0 auto;">
+            <img src="assets/hand-thumbs-up.png" alt="" style="transform: rotate(8deg);">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="assets/logo-white-full.svg" alt="Paul &amp; Me">
+          <p>A smart, intuitive solution for renting out vacation homes online.</p>
+        </div>
+        <div><h2>Product</h2><ul><li><a href="features.html">Features</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="signup.html">Get started</a></li></ul></div>
+        <div><h2>Company</h2><ul><li><a href="contact.html">Contact</a></li><li><a href="help.html">Help &amp; FAQ</a></li><li><a href="login.html">Log in</a></li></ul></div>
+        <div><h2>Reach us</h2><ul><li>07153 9250-50</li><li>help@pauland.me</li><li>Borsigstr. 26, 73249 Wernau</li></ul></div>
+      </div>
+      <div class="footer-bottom container" style="padding-left:0;padding-right:0;">
+        <span>© 2026 Paul an Me GmbH · a DIRS21 company</span>
+        <span><a href="legal.html" style="color:inherit">Impressum</a> · <a href="legal.html#privacy" style="color:inherit">Datenschutz</a> · <a href="legal.html#terms" style="color:inherit">AGB</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-hands="on">
+<head>
+  <meta charset="utf-8">
+  <title>Sign up — Paul &amp; Me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    /* Replace cream with a soft tone for focus */
+    .signup-wrap {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: stretch;
+    }
+    @media (min-width: 980px) {
+      .signup-wrap { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Left: form area */
+    .signup-form-side {
+      padding: 24px 20px 48px;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (min-width: 980px) {
+      .signup-form-side { padding: 40px 56px 48px; }
+    }
+    .form-card {
+      max-width: 480px;
+      width: 100%;
+      margin: 24px auto;
+    }
+
+    /* Header strip with logo + back */
+    .signup-head {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 480px; width: 100%; margin: 0 auto;
+    }
+    .signup-head img { height: 36px; }
+    .signup-head a {
+      font-size: 13px; text-decoration: none; color: var(--site-fg); opacity: .7;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .signup-head a:hover { opacity: 1; color: var(--pam-pink); }
+
+    /* Stepper */
+    .stepper {
+      display: flex; gap: 8px;
+      margin: 32px 0 24px;
+    }
+    .step-dot {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--site-line);
+      transition: background var(--dur-base);
+    }
+    .step-dot.done { background: var(--pam-pink); }
+    .step-dot.current { background: var(--pam-navy); }
+
+    .step-label {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--pam-pink);
+      margin-bottom: 8px;
+    }
+    .form-card h1 { font-size: clamp(28px, 4.5vw, 40px); margin-bottom: 8px; line-height: 1.04; }
+    .form-card .sub { font-size: 15px; opacity: .8; margin-bottom: 24px; max-width: 36ch; }
+
+    /* Plan cards in step 1 */
+    .plan-pick {
+      display: grid; grid-template-columns: 1fr; gap: 14px;
+      margin-bottom: 24px;
+    }
+    .plan-pick label {
+      cursor: pointer;
+      background: var(--site-card);
+      border: 2px solid var(--site-line);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: border-color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast);
+      display: block;
+      position: relative;
+    }
+    .plan-pick input { position: absolute; opacity: 0; pointer-events: none; }
+    .plan-pick label:hover { border-color: var(--pam-pink-200); }
+    .plan-pick input:checked + .plan-pick-body {
+      border-color: var(--pam-pink);
+      background: var(--pam-pink-50);
+    }
+    .plan-pick label:has(input:checked) { border-color: var(--pam-pink); background: var(--pam-pink-50); }
+    html[data-theme="dark"] .plan-pick label:has(input:checked) { background: rgba(245,80,125,.18); }
+    .plan-pick .pp-top {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+    }
+    .plan-pick .pp-name { font-family: var(--font-display); text-transform: uppercase; font-size: 20px; }
+    .plan-pick .pp-tag { font-size: 13px; opacity: .75; margin-top: 4px; }
+    .plan-pick .pp-price { font-family: var(--font-display); color: var(--pam-pink); font-size: 22px; line-height: 1; text-align: right; }
+    .plan-pick .pp-price small { display: block; font-size: 11px; opacity: .7; margin-top: 4px; }
+    .plan-pick .pp-feats { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; opacity: .8; }
+    .plan-pick .pp-feats li::before { content: "✓"; color: var(--pam-pink); margin-right: 4px; }
+    .plan-pick .pp-badge {
+      position: absolute; top: -10px; right: 16px;
+      background: var(--pam-navy); color: #fff;
+      font-family: var(--font-display); text-transform: uppercase;
+      font-size: 10px; padding: 4px 10px; border-radius: 999px;
+      letter-spacing: .06em;
+    }
+
+    /* Step nav */
+    .step-nav {
+      display: flex; gap: 12px; align-items: center;
+      margin-top: 32px;
+    }
+    .step-nav .ghost {
+      background: transparent; border: 0;
+      color: var(--site-fg); opacity: .7;
+      font-family: var(--font-body);
+      font-size: 14px;
+      padding: 12px 8px;
+      cursor: pointer;
+    }
+    .step-nav .ghost:hover { opacity: 1; color: var(--pam-pink); }
+    .step-nav .grow { flex: 1; }
+
+    /* Right: visual side (decorative) */
+    .signup-visual {
+      background: var(--pam-navy);
+      color: #fff;
+      padding: 56px 32px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 980px) {
+      .signup-visual { display: flex; }
+    }
+    .visual-content {
+      position: relative;
+      max-width: 440px;
+      z-index: 2;
+    }
+    .visual-content h2 {
+      color: #fff;
+      font-size: 38px;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .visual-content h2 .pink { color: var(--pam-pink); }
+    .visual-content p { color: rgba(255,255,255,.78); font-size: 16px; line-height: 1.5; }
+
+    .visual-quote {
+      margin-top: 32px;
+      background: rgba(255,255,255,.08);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border-left: 3px solid var(--pam-pink);
+    }
+    .visual-quote p { color: #fff; font-style: italic; font-size: 15px; }
+    .visual-quote .who { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 12px; }
+    .visual-quote .who strong { color: #fff; font-style: normal; }
+
+    .signup-visual .hand-deco {
+      position: absolute;
+      width: 200px; bottom: -30px; right: -30px;
+      transform: rotate(-14deg);
+      opacity: .9;
+      z-index: 1;
+    }
+
+    /* Success state */
+    .success-card {
+      text-align: center;
+      padding: 24px 0;
+    }
+    .success-card .checkbox-big {
+      width: 88px; height: 88px;
+      border-radius: 999px;
+      background: var(--pam-pink);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      box-shadow: var(--shadow-pink);
+    }
+    .success-card h1 { font-size: 36px; margin-bottom: 12px; }
+    .success-card p { margin-bottom: 24px; }
+
+    .step { display: none; }
+    .step.active { display: block; }
+  </style>
+</head>
+<body data-screen-label="Sign up">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main id="main" class="signup-wrap">
+
+    <!-- ============ FORM SIDE ============ -->
+    <div class="signup-form-side">
+      <header class="signup-head">
+        <a href="index.html" aria-label="Paul &amp; Me — Home">
+          <img src="assets/logo-blue-full.svg" alt="Paul &amp; Me">
+        </a>
+        <a href="login.html">Already a host? Log in <span data-lucide="arrow-right" style="width:14px;height:14px"></span></a>
+      </header>
+
+      <div class="form-card">
+        <div class="stepper" aria-hidden="true">
+          <div class="step-dot current" data-dot="1"></div>
+          <div class="step-dot" data-dot="2"></div>
+          <div class="step-dot" data-dot="3"></div>
+          <div class="step-dot" data-dot="4"></div>
+        </div>
+
+        <!-- ============ STEP 1: Plan ============ -->
+        <section class="step active" data-step="1" data-screen-label="Step 1 · Plan">
+          <span class="step-label">Step 1 of 4</span>
+          <h1>Pick a plan that fits.</h1>
+          <p class="sub">You can change this any time. Both plans come with a 14-day free trial.</p>
+
+          <form class="plan-pick" onsubmit="return false">
+            <label>
+              <input type="radio" name="plan" value="foundation">
+              <div class="pp-top">
+                <div>
+                  <div class="pp-name">Foundation</div>
+                  <div class="pp-tag">For your one beloved holiday flat.</div>
+                </div>
+                <div class="pp-price">69,90 €<small>per month</small></div>
+              </div>
+              <ul class="pp-feats">
+                <li>1 property</li><li>5 pricing rates</li><li>Branded widget</li><li>Chat support</li>
+              </ul>
+            </label>
+            <label>
+              <input type="radio" name="plan" value="expert" checked>
+              <span class="pp-badge">Most popular</span>
+              <div class="pp-top">
+                <div>
+                  <div class="pp-name">Expert</div>
+                  <div class="pp-tag">For 2–3 properties &amp; vouchers.</div>
+                </div>
+                <div class="pp-price">119,90 €<small>per month</small></div>
+              </div>
+              <ul class="pp-feats">
+                <li>Unlimited properties</li><li>Unlimited rates</li><li>Voucher shop</li><li>Phone support</li>
+              </ul>
+            </label>
+          </form>
+
+          <div class="step-nav">
+            <span class="grow muted" style="font-size: 13px;">14-day free trial · no card required</span>
+            <a class="slab md" href="#" data-next>
+              <span class="back">Continue</span>
+              <span class="face">Continue</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ============ STEP 2: Account ============ -->
+        <section class="step" data-step="2" data-screen-label="Step 2 · Account">
+          <span class="step-label">Step 2 of 4</span>
+          <h1>Create your account.</h1>
+          <p class="sub">This is what you'll use to log in. We'll never share your email.</p>
+
+          <form onsubmit="return false">
+            <div class="field-row">
+              <div class="field">
+                <label for="firstname">First name</label>
+                <input id="firstname" type="text" autocomplete="given-name" placeholder="Anna">
+              </div>
+              <div class="field">
+                <label for="lastname">Last name</label>
+                <input id="lastname" type="text" autocomplete="family-name" placeholder="Müller">
+              </div>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" autocomplete="email" placeholder="anna@yourplace.com">
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" type="password" autocomplete="new-password" placeholder="At least 10 characters">
+              <span class="hint">10+ characters, mix of letters and numbers.</span>
+            </div>
+            <label class="checkbox">
+              <input type="checkbox" id="terms" checked>
+              <span>I agree to the <a href="legal.html#terms">terms</a> and have read the <a href="legal.html#privacy">privacy policy</a>.</span>
+            </label>
+          </form>
+
+          <div class="step-nav">
+            <button class="ghost" data-prev>← Back</button>
+            <div class="grow"></div>
+            <a class="slab md" href="#" data-next>
+              <span class="back">Continue</span>
+              <span class="face">Continue</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ============ STEP 3: Property ============ -->
+        <section class="step" data-step="3" data-screen-label="Step 3 · Property">
+          <span class="step-label">Step 3 of 4</span>
+          <h1>Tell Paul about your place.</h1>
+          <p class="sub">Just the basics. You can add photos, prices and details after sign-up.</p>
+
+          <form onsubmit="return false">
+            <div class="field">
+              <label for="propname">Property name</label>
+              <input id="propname" type="text" placeholder="Blue Lagoon, Wohnung 3, …">
+            </div>
+            <div class="field">
+              <label for="proptype">Type of property</label>
+              <select id="proptype">
+                <option>Apartment</option>
+                <option>House</option>
+                <option>Cabin / chalet</option>
+                <option>Bed &amp; breakfast room</option>
+                <option>Studio</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="city">City</label>
+                <input id="city" type="text" placeholder="Sylt">
+              </div>
+              <div class="field">
+                <label for="country">Country</label>
+                <select id="country">
+                  <option>Germany</option><option>Austria</option><option>Switzerland</option>
+                  <option>Italy</option><option>France</option><option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="rate">Approx. nightly rate</label>
+              <input id="rate" type="text" placeholder="150 €">
+              <span class="hint">Just a starting point — you can set seasonal rates later.</span>
+            </div>
+          </form>
+
+          <div class="step-nav">
+            <button class="ghost" data-prev>← Back</button>
+            <div class="grow"></div>
+            <a class="slab md" href="#" data-next>
+              <span class="back">Continue</span>
+              <span class="face">Continue</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ============ STEP 4: Goal ============ -->
+        <section class="step" data-step="4" data-screen-label="Step 4 · Goal">
+          <span class="step-label">Step 4 of 4 — almost there</span>
+          <h1>What brought you to Paul?</h1>
+          <p class="sub">Optional, but helps us send you the right tips.</p>
+
+          <form onsubmit="return false" id="goalForm">
+            <div class="plan-pick">
+              <label><input type="radio" name="goal" value="commission"><div class="pp-top"><div><div class="pp-name">Done paying commission</div><div class="pp-tag">I'd like to keep more of what guests pay.</div></div></div></label>
+              <label><input type="radio" name="goal" value="new"><div class="pp-top"><div><div class="pp-name">I'm just starting out</div><div class="pp-tag">First time renting my place — show me the ropes.</div></div></div></label>
+              <label><input type="radio" name="goal" value="own-site"><div class="pp-top"><div><div class="pp-name">I want bookings on my own site</div><div class="pp-tag">I already have a website — I want a widget on it.</div></div></div></label>
+              <label><input type="radio" name="goal" value="other"><div class="pp-top"><div><div class="pp-name">Something else</div><div class="pp-tag">I'll explain after I'm in.</div></div></div></label>
+            </div>
+          </form>
+
+          <div class="step-nav">
+            <button class="ghost" data-prev>← Back</button>
+            <div class="grow"></div>
+            <a class="slab md" href="#" data-finish>
+              <span class="back">Start free trial</span>
+              <span class="face">Start free trial</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ============ STEP 5: Success ============ -->
+        <section class="step" data-step="5" data-screen-label="Step 5 · Success">
+          <div class="success-card" role="status">
+            <div class="checkbox-big"><span data-lucide="check" style="width:48px;height:48px"></span></div>
+            <h1>Welcome to Paul &amp; Me!</h1>
+            <p class="sub" style="margin: 0 auto 28px;">We've sent a confirmation email to your inbox. Open it to verify your account, and we'll take you to the dashboard from there.</p>
+            <div class="row center">
+              <a class="slab md" href="login.html"><span class="back">Go to login</span><span class="face">Go to login</span></a>
+              <a class="slab white md" href="help.html"><span class="back">Read setup guide</span><span class="face">Read setup guide</span></a>
+            </div>
+            <p class="muted" style="font-size: 13px; margin-top: 28px;">No email after 5 minutes? <a href="contact.html">Get in touch.</a></p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ============ VISUAL SIDE ============ -->
+    <aside class="signup-visual" aria-hidden="true">
+      <div class="visual-content">
+        <h2>You're about <span class="pink">20 minutes</span> from your own booking engine.</h2>
+        <p>Sign up, add your place, paste a widget — that's it. Paul will be right beside you the whole way.</p>
+        <div class="visual-quote">
+          <p>"I had my apartment on the market the same afternoon I signed up. The widget on my own site does the rest — no commission, no hassle."</p>
+          <div class="who"><strong>Maria K.</strong> · Two apartments in Berlin</div>
+        </div>
+      </div>
+      <div class="hand-deco">
+        <img src="assets/hand-thumbs-up.png" alt="">
+      </div>
+    </aside>
+  </main>
+
+  <script src="assets/site.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Step navigation
+    const steps = document.querySelectorAll('.step');
+    const dots = document.querySelectorAll('.step-dot');
+    let current = 1;
+    const total = 4;
+
+    function goto(n) {
+      current = n;
+      steps.forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+      dots.forEach(d => {
+        const i = +d.dataset.dot;
+        d.classList.toggle('done', i < n);
+        d.classList.toggle('current', i === n);
+      });
+      // scroll to top of card
+      const card = document.querySelector('.form-card');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // move focus to the new step's heading so screen readers announce it
+      const heading = document.querySelector('.step.active h1');
+      if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
+    }
+
+    // Pre-select plan from query string
+    (function selectPlanFromUrl() {
+      const params = new URLSearchParams(location.search);
+      const plan = params.get('plan');
+      if (plan === 'foundation') {
+        document.querySelector('input[name="plan"][value="foundation"]').checked = true;
+      }
+    })();
+
+    document.querySelectorAll('[data-next]').forEach(btn => {
+      btn.addEventListener('click', e => { e.preventDefault(); if (current < total) goto(current + 1); });
+    });
+    document.querySelectorAll('[data-prev]').forEach(btn => {
+      btn.addEventListener('click', e => { e.preventDefault(); if (current > 1) goto(current - 1); });
+    });
+    document.querySelectorAll('[data-finish]').forEach(btn => {
+      btn.addEventListener('click', e => { e.preventDefault(); goto(5); });
+    });
+  </script>
+</body>
+</html>

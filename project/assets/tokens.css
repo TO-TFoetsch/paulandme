@@ -1,0 +1,173 @@
+/* =========================================================
+   Paul & Me — Core design tokens
+   Colors + Type in one sheet. Keep simple.
+   ========================================================= */
+
+/* ---- Fonts (Google Fonts substitutions) -----------------
+   Brand calls for:
+     Display: "Alphabet Soup" — rounded, chunky, all-caps.
+              Google substitute: "Lilita One" (very close shapes,
+              same tall-x-height rounded energy).
+     Body:    "Futura PT Book" — geometric sans.
+              Google substitute: "Jost" (geometric, Futura-like).
+   FLAGGED: user should supply real Alphabet Soup + Futura PT
+            files if available for final production use.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Jost:ital,wght@0,300..700;1,300..700&display=swap');
+
+:root {
+  /* ---------- Brand colors (from stylesheet) ---------- */
+  --pam-pink:        #F5507D;  /* CMYK 0/80/25/0   RGB 245/80/125 */
+  --pam-navy:        #001E50;  /* CMYK 100/90/40/40 RGB 0/30/80 */
+
+  /* ---------- Pink scale ---------- */
+  --pam-pink-50:     #FFE9EF;
+  --pam-pink-100:    #FFD1DD;
+  --pam-pink-200:    #FBA9BD;
+  --pam-pink-300:    #F87E9D;
+  --pam-pink-400:    #F5507D;   /* = brand pink */
+  --pam-pink-500:    #E03C68;
+  --pam-pink-600:    #B82D54;
+  --pam-pink-700:    #8C1F3E;
+
+  /* ---------- Navy scale ---------- */
+  --pam-navy-50:     #E6E9F0;
+  --pam-navy-100:    #C0C7D8;
+  --pam-navy-200:    #8894AF;
+  --pam-navy-300:    #4D5E87;
+  --pam-navy-400:    #1E3369;
+  --pam-navy-500:    #001E50;   /* = brand navy */
+  --pam-navy-600:    #001642;
+  --pam-navy-700:    #000E2E;
+
+  /* ---------- Neutral / paper ---------- */
+  --pam-cream:       #F4EFE7;   /* the section background */
+  --pam-cream-2:     #FBE8D1;   /* warm footer page bg */
+  --pam-paper:       #FFFFFF;
+  --pam-ink:         #0B0B0B;   /* used for display headings on white */
+  --pam-smoke:       #F5F6F8;
+  --pam-line:        #E3E1DB;   /* hairline on cream */
+  --pam-line-2:      #D9DCE4;   /* hairline on white */
+  --pam-muted:       #6B7280;
+
+  /* ---------- Semantic ---------- */
+  --pam-success:     #2FA37A;
+  --pam-warn:        #E49826;
+  --pam-error:       #E03C4E;
+  --pam-info:        var(--pam-navy);
+
+  /* ---------- Foregrounds ---------- */
+  --fg-1:            var(--pam-navy);        /* default body text */
+  --fg-2:            #3A476A;                /* secondary */
+  --fg-3:            #7A829B;                /* tertiary / captions */
+  --fg-on-navy:      #FFFFFF;
+  --fg-on-pink:      #FFFFFF;
+
+  /* ---------- Backgrounds ---------- */
+  --bg-page:         var(--pam-cream);
+  --bg-surface:      var(--pam-paper);
+  --bg-inverse:      var(--pam-navy);
+  --bg-accent:       var(--pam-pink);
+
+  /* ---------- Signature gradient (pink → navy) ---------- */
+  --pam-gradient:    linear-gradient(135deg, #F5507D 0%, #9B2B64 45%, #001E50 100%);
+  --pam-gradient-soft: linear-gradient(135deg, #FFD1DD 0%, #C8C9DB 55%, #A9B0C5 100%);
+
+  /* ---------- Radii (logo uses ~22% — rounded rect) ---------- */
+  --radius-xs:       6px;
+  --radius-sm:       10px;
+  --radius-md:       14px;
+  --radius-lg:       22px;      /* card / button default */
+  --radius-xl:       32px;      /* hero cards */
+  --radius-pill:     999px;
+
+  /* ---------- Spacing (8px base) ---------- */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px;
+  --s-12: 48px; --s-16: 64px; --s-20: 80px; --s-24: 96px;
+
+  /* ---------- Elevation ---------- */
+  --shadow-xs:  0 1px 2px rgba(0,30,80,.06);
+  --shadow-sm:  0 2px 6px rgba(0,30,80,.08);
+  --shadow-md:  0 6px 18px rgba(0,30,80,.10);
+  --shadow-lg:  0 18px 40px rgba(0,30,80,.14);
+  --shadow-pink: 0 10px 24px rgba(245,80,125,.35);
+
+  /* ---------- Type families ---------- */
+  --font-display:    "Lilita One", "Alphabet Soup", "Bungee", system-ui, sans-serif;
+  --font-body:       "Jost", "Futura PT", "Futura", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:       "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  /* ---------- Type scale (display = Lilita/Alphabet Soup) ---------- */
+  --fs-display-xl:   clamp(48px, 7vw, 96px);
+  --fs-display-lg:   clamp(40px, 5.5vw, 72px);
+  --fs-h1:           clamp(36px, 4.4vw, 56px);
+  --fs-h2:           clamp(28px, 3.2vw, 40px);
+  --fs-h3:           24px;
+  --fs-h4:           20px;
+  --fs-body-lg:      18px;
+  --fs-body:         16px;
+  --fs-small:        14px;
+  --fs-caption:      12px;
+
+  /* ---------- Motion ---------- */
+  --ease-out:        cubic-bezier(.2,.7,.2,1);
+  --ease-bounce:     cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:        140ms;
+  --dur-base:        220ms;
+  --dur-slow:        420ms;
+}
+
+/* =========================================================
+   Semantic base styles
+   ========================================================= */
+html, body {
+  background: var(--bg-page);
+  color: var(--fg-1);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .pam-display {
+  font-family: var(--font-display);
+  font-weight: 400; /* Lilita One is a single weight */
+  letter-spacing: 0.01em;
+  text-transform: uppercase;     /* brand headings are ALL CAPS */
+  color: var(--pam-ink);
+  line-height: 1.02;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+
+.pam-display-xl { font-family: var(--font-display); text-transform: uppercase; font-size: var(--fs-display-xl); line-height: .98; }
+.pam-display-lg { font-family: var(--font-display); text-transform: uppercase; font-size: var(--fs-display-lg); line-height: 1.0;  }
+
+p, .pam-body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: pretty;
+}
+.pam-body-lg { font-size: var(--fs-body-lg); line-height: 1.55; }
+.pam-small   { font-size: var(--fs-small); color: var(--fg-2); }
+.pam-caption { font-size: var(--fs-caption); color: var(--fg-3); letter-spacing: .02em; }
+
+a { color: var(--pam-pink); text-decoration: none; }
+a:hover { color: var(--pam-pink-500); }
+
+code, pre { font-family: var(--font-mono); }
+
+/* Utility: subtle ink heading on navy backgrounds */
+.on-navy h1, .on-navy h2, .on-navy h3, .on-navy h4,
+.on-navy .pam-display { color: #fff; }
+.on-navy p { color: rgba(255,255,255,.86); }

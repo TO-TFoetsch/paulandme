@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-hands="on">
+<head>
+  <meta charset="utf-8">
+  <title>Log in — Paul &amp; Me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    .login-wrap {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: stretch;
+    }
+    @media (min-width: 980px) { .login-wrap { grid-template-columns: 1fr 1fr; } }
+
+    .login-form-side {
+      padding: 24px 20px 48px;
+      display: flex; flex-direction: column;
+    }
+    @media (min-width: 980px) { .login-form-side { padding: 40px 56px; justify-content: center; } }
+
+    .login-card { max-width: 440px; width: 100%; margin: 24px auto; }
+
+    .login-head {
+      max-width: 440px; margin: 0 auto; width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .login-head img { height: 36px; }
+    .login-head a { font-size: 13px; text-decoration: none; color: var(--site-fg); opacity: .7; }
+    .login-head a:hover { color: var(--pam-pink); opacity: 1; }
+
+    .login-card h1 { font-size: clamp(32px, 5vw, 44px); margin-bottom: 8px; }
+    .login-card .sub { font-size: 15px; opacity: .8; margin-bottom: 28px; }
+
+    .form-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 4px 0 22px;
+    }
+    .form-row a { font-size: 13px; text-decoration: none; }
+    .form-row a:hover { text-decoration: underline; }
+
+    .or-divider {
+      display: flex; align-items: center; gap: 14px;
+      color: var(--fg-3); font-size: 12px;
+      text-transform: uppercase; letter-spacing: .1em;
+      margin: 24px 0;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ""; flex: 1; height: 1px; background: var(--site-line);
+    }
+
+    .social-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--site-line);
+      background: var(--site-card);
+      color: var(--site-fg);
+      border-radius: var(--radius-md);
+      font-size: 15px; font-weight: 500;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .social-btn:hover { border-color: var(--pam-pink); background: var(--pam-pink-50); }
+    html[data-theme="dark"] .social-btn:hover { background: rgba(245,80,125,.12); }
+    .social-btn svg { width: 18px; height: 18px; }
+
+    .signup-prompt {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 14px;
+      opacity: .85;
+    }
+
+    .login-visual {
+      background: var(--pam-pink);
+      color: #fff;
+      padding: 56px 32px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 980px) { .login-visual { display: flex; } }
+    .login-visual h2 {
+      color: #fff;
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1.02;
+      max-width: 14ch;
+      margin-bottom: 14px;
+    }
+    .login-visual p {
+      color: rgba(255,255,255,.92); font-size: 16px;
+      max-width: 380px;
+    }
+    .visual-stats {
+      margin-top: 40px;
+      display: grid; gap: 16px;
+      max-width: 380px;
+    }
+    .visual-stat {
+      background: rgba(255,255,255,.14);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      backdrop-filter: blur(6px);
+    }
+    .visual-stat .num { font-family: var(--font-display); text-transform: uppercase; font-size: 32px; line-height: 1; }
+    .visual-stat .lbl { font-size: 13px; opacity: .9; margin-top: 4px; }
+
+    .login-visual .hand-deco {
+      position: absolute;
+      width: 240px;
+      bottom: -40px; right: -40px;
+      transform: rotate(-16deg);
+      opacity: .9;
+    }
+    .visual-inner { position: relative; z-index: 2; max-width: 440px; }
+  </style>
+</head>
+<body data-screen-label="Log in">
+
+  <main class="login-wrap">
+
+    <div class="login-form-side">
+      <header class="login-head">
+        <a href="index.html" aria-label="Paul &amp; Me — Home">
+          <img class="light-only" src="assets/logo-blue-full.svg" alt="Paul &amp; Me">
+          <img class="dark-only" src="assets/logo-white-full.svg" alt="Paul &amp; Me">
+        </a>
+        <a href="signup.html">No account yet?</a>
+      </header>
+
+      <div class="login-card">
+        <h1>Welcome back.</h1>
+        <p class="sub">Sign in to your Paul &amp; Me dashboard.</p>
+
+        <form onsubmit="event.preventDefault(); alert('Demo only — connect with Claude Code.');">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" autocomplete="email" placeholder="anna@yourplace.com" required>
+          </div>
+          <div class="field" style="margin-bottom: 4px;">
+            <label for="password">Password</label>
+            <input id="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+          </div>
+          <div class="form-row">
+            <label class="checkbox"><input type="checkbox" checked> <span>Stay signed in</span></label>
+            <a href="#" onclick="event.preventDefault(); alert('Reset email demo only.');">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="slab block lg">
+            <span class="back">Log in</span>
+            <span class="face">Log in</span>
+          </button>
+        </form>
+
+        <div class="or-divider">or continue with</div>
+
+        <div class="row" style="gap: 10px;">
+          <button class="social-btn" type="button">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M12 10.2v3.8h5.4c-.2 1.4-1.6 4-5.4 4-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.1.8 3.8 1.5l2.6-2.6C16.7 3.3 14.6 2.4 12 2.4 6.7 2.4 2.4 6.7 2.4 12s4.3 9.6 9.6 9.6c5.5 0 9.2-3.9 9.2-9.4 0-.6 0-1.1-.2-1.6H12z"/></svg>
+            Google
+          </button>
+          <button class="social-btn" type="button">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M16.5 1.5c0 1.2-.5 2.3-1.3 3.1-.9.9-2.2 1.6-3.3 1.5-.1-1.1.5-2.3 1.2-3.1.8-.9 2.2-1.5 3.4-1.5zM20 17.4c-.6 1.3-.9 1.9-1.6 3-1 1.7-2.4 3.7-4.2 3.8-1.6 0-2-1.1-4.1-1.1-2.2 0-2.7 1.1-4.3 1.1-1.8 0-3.1-1.9-4.1-3.5-2.7-4.6-3-10-1.3-12.9C1.6 6 3.5 4.8 5.3 4.8c1.8 0 2.9 1 4.4 1 1.4 0 2.3-1 4.4-1 1.6 0 3.3.8 4.5 2.3-4 2.1-3.3 7.7 1.4 10.3z"/></svg>
+            Apple
+          </button>
+        </div>
+
+        <p class="signup-prompt">
+          New to Paul &amp; Me? <a href="signup.html">Start a free trial →</a>
+        </p>
+      </div>
+    </div>
+
+    <aside class="login-visual">
+      <div class="visual-inner">
+        <h2>Paul missed you.</h2>
+        <p>While you were gone, the booking widget kept doing its thing. Here's what hosts like you saved this month:</p>
+        <div class="visual-stats">
+          <div class="visual-stat">
+            <div class="num">€3,840</div>
+            <div class="lbl">average commission saved per host last month</div>
+          </div>
+          <div class="visual-stat">
+            <div class="num">11,902</div>
+            <div class="lbl">commission-free bookings since launch</div>
+          </div>
+        </div>
+      </div>
+      <div class="hand-deco">
+        <img src="assets/hand-thumbs-up.png" alt="">
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="assets/site.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
