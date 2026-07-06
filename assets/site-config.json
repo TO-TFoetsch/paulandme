@@ -1,70 +1,14 @@
 {
   "version": 1,
   "presentation": {
-    "theme": "light",
+    "theme": "dark",
     "hands": "on",
     "contrast": "on",
     "motion": "on",
     "hero": "A"
   },
   "banners": [],
-  "launchTodos": [
-    {
-      "id": "todo-fonts",
-      "text": "Replace placeholder fonts (Lilita One / Jost) with the licensed brand fonts Alphabet Soup + Futura PT in assets/tokens.css",
-      "done": false
-    },
-    {
-      "id": "todo-consent",
-      "text": "Choose & integrate a cookie-consent solution (CMP vs. self-built) — required before enabling any tracking pixels",
-      "done": false
-    },
-    {
-      "id": "todo-legal",
-      "text": "Have the legal pages reviewed & completed by legal (Impressum, Datenschutz, AGB) — Datenschutz must cover the tracking tools actually used",
-      "done": false
-    },
-    {
-      "id": "todo-forms",
-      "text": "Wire up signup, login and contact forms to a real backend — all forms are non-functional demo mockups right now",
-      "done": false
-    },
-    {
-      "id": "todo-domain",
-      "text": "Set up the production domain (e.g. pauland.me) with HTTPS as GitHub Pages custom domain, replacing to-tfoetsch.github.io",
-      "done": false
-    },
-    {
-      "id": "todo-seo",
-      "text": "SEO finish: Open Graph / Twitter meta tags, sitemap.xml, robots.txt, canonical URLs",
-      "done": false
-    },
-    {
-      "id": "todo-404",
-      "text": "Add a custom 404 page (404.html) — GitHub Pages serves it automatically",
-      "done": false
-    },
-    {
-      "id": "todo-proofread",
-      "text": "Proofread all content: prices, phone number, address — and check the footer company name ('Paul an Me GmbH' — typo?)",
-      "done": false
-    },
-    {
-      "id": "todo-presentation",
-      "text": "Decide the final presentation settings (hero variant A/B/C, theme) here in the CMS and publish them",
-      "done": false
-    },
-    {
-      "id": "todo-qa",
-      "text": "Cross-browser & mobile QA plus a Lighthouse pass (performance / accessibility)",
-      "done": false
-    },
-    {
-      "id": "todo-tracking-ids",
-      "text": "Enter the real tracking IDs (GTM/GA4/Meta/LinkedIn/HubSpot) in the CMS — only after consent is live",
-      "done": false
-    }
-  ],
+  "launchTodos": [],
   "tracking": {
     "gtmId": "",
     "ga4Id": "",
